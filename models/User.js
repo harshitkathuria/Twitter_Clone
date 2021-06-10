@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const validator = require("validator");
+const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema(
   {
@@ -49,6 +49,24 @@ const userSchema = new mongoose.Schema(
     timestamps: true
   }
 );
+
+// Encrypt Password
+userSchema.pre("save", async function (next) {
+  if (!this.isModified("password")) return next();
+
+  this.password = await bcrypt.hash(this.password, 12);
+  this.passwordConfirm = undefined;
+
+  next();
+});
+
+// Compare Password
+userSchema.methods.correctPassword = async function (
+  candidatePassword,
+  password
+) {
+  return await bcrypt.compare(candidatePassword, password);
+};
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;
