@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const validator = require("validator");
 const User = require("../models/User");
+const Email = require("../utils/email");
 
 const signToken = id => {
   const token = jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -31,6 +32,8 @@ exports.signup = async (req, res, next) => {
       password: req.body.password,
       confirmPassword: req.body.confirmPassword
     });
+
+    await new Email(newUser).sendWelcome();
 
     const token = signToken();
     res.status(201).json({
