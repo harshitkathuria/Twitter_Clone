@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const validator = require("validator");
 const User = require("../models/User");
 
 const signToken = id => {
@@ -11,9 +12,22 @@ const signToken = id => {
 // Signup
 exports.signup = async (req, res, next) => {
   try {
+    // Validate email and date
+    if (!validator.isEmail(req.body.email))
+      return res.status(400).json({
+        status: "fail",
+        msg: "Please correct email address"
+      });
+    if (!validator.isDate(req.body.DOB))
+      return res.status(400).json({
+        status: "fail",
+        msg: "Please correct Date of Birth"
+      });
+
     const newUser = await User.create({
       name: req.body.name,
       email: req.body.email,
+      DOB: req.body.DOB,
       password: req.body.password,
       confirmPassword: req.body.confirmPassword
     });
@@ -40,7 +54,7 @@ exports.login = async (req, res, next) => {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      res.status(400).json({
+      return res.status(400).json({
         status: "fail",
         msg: "Please provide both email and password"
       });
@@ -49,7 +63,7 @@ exports.login = async (req, res, next) => {
     const user = await User.findOne({ email }).select("+password");
 
     if (!user || !(await user.correctPassword(password, user.password))) {
-      res.status(401).json({
+      return res.status(401).json({
         status: "fail",
         msg: "Incorrect email or password"
       });
