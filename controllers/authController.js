@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const validator = require("validator");
 const crypto = require("crypto");
+const { promisify } = require("util");
 
 const User = require("../models/User");
 const Email = require("../utils/email");
@@ -10,6 +11,56 @@ const signToken = id => {
     expiresIn: process.env.JWT_EXPIRES_IN
   });
   return token;
+};
+
+// Protecting routes from non-logged users
+exports.protect = async (req, res, next) => {
+  try {
+    // Get token
+    let token;
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith("Bearer")
+    ) {
+      token = req.headers.authorization.split(" ")[1];
+    }
+
+    if (!token) {
+      return res.status(401).json({
+        status: "fail",
+        msg: "Please log in first"
+      });
+    }
+
+    // Verification of token
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+
+    // Check if user still exist
+    const currentUser = await User.findById(decoded.id);
+    if (!currentUser) {
+      return res.status(401).json({
+        status: "fail",
+        msg: "The user belonging to this token no longer exist"
+      });
+    }
+
+    // Check is user changed password after the token was issued
+    if (currentUser.changedPasswordAfter(decoded.iat)) {
+      return res.status(401).json({
+        status: "fail",
+        msg: "The password was changed. Please log in again"
+      });
+    }
+
+    req.user = currentUser;
+    next();
+  } catch (err) {
+    console.log(err.message);
+    return res.status(400).json({
+      status: "fail",
+      msg: err.message
+    });
+  }
 };
 
 // Signup
@@ -37,7 +88,7 @@ exports.signup = async (req, res, next) => {
 
     await new Email(newUser).sendWelcome();
 
-    const token = signToken();
+    const token = signToken(newUser._id);
     res.status(201).json({
       status: "success",
       token,
@@ -73,7 +124,7 @@ exports.login = async (req, res, next) => {
         msg: "Incorrect email or password"
       });
     }
-    const token = signToken();
+    const token = signToken(user._id);
     res.status(200).json({
       status: "success",
       token,
@@ -154,7 +205,7 @@ exports.resetPassword = async (req, res) => {
     user.passwordResetExpires = undefined;
     await user.save();
 
-    const token = signToken();
+    const token = signToken(user._id);
     res.status(201).json({
       status: "success",
       token,
