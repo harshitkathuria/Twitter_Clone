@@ -34,4 +34,11 @@ module.exports = class Email {
   async sendWelcome() {
     await this.send("Welcome To Twitter!", "Welcome to the Twitter Family");
   }
+
+  async sendPasswordReset(url) {
+    await this.send(
+      "Reset Your Password",
+      `Your Password Reset Token (valid for only 10 minutes): ${url}`
+    );
+  }
 };
