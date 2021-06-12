@@ -2,6 +2,10 @@ const jwt = require("jsonwebtoken");
 const validator = require("validator");
 const crypto = require("crypto");
 const { promisify } = require("util");
+const {
+  signUpUserValidation,
+  loginUserValidation
+} = require("../utils/validation");
 
 const User = require("../models/User");
 const Email = require("../utils/email");
@@ -11,6 +15,13 @@ const signToken = id => {
     expiresIn: process.env.JWT_EXPIRES_IN
   });
   return token;
+};
+
+const validationError = (res, error) => {
+  return res.status(400).json({
+    status: "fail",
+    msg: error.details.map(detail => detail.message)
+  });
 };
 
 // Protecting routes from non-logged users
@@ -66,17 +77,9 @@ exports.protect = async (req, res, next) => {
 // Signup
 exports.signup = async (req, res, next) => {
   try {
-    // Validate email and date
-    if (!validator.isEmail(req.body.email))
-      return res.status(400).json({
-        status: "fail",
-        msg: "Please correct email address"
-      });
-    if (!validator.isDate(req.body.DOB))
-      return res.status(400).json({
-        status: "fail",
-        msg: "Please correct Date of Birth"
-      });
+    // Validation
+    const { error } = signUpUserValidation(req.body);
+    if (error) return validationError(res, error);
 
     const newUser = await User.create({
       name: req.body.name,
@@ -107,14 +110,11 @@ exports.signup = async (req, res, next) => {
 // Login
 exports.login = async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    // Validation
+    const { error } = loginUserValidation(req.body);
+    if (error) return validationError(res, error);
 
-    if (!email || !password) {
-      return res.status(400).json({
-        status: "fail",
-        msg: "Please provide both email and password"
-      });
-    }
+    const { email, password } = req.body;
     // Confirm email and password
     const user = await User.findOne({ email }).select("+password");
 
@@ -142,19 +142,19 @@ exports.login = async (req, res, next) => {
 
 // Forget Password
 exports.forgotPassword = async (req, res) => {
-  const user = await User.findOne({ email: req.body.email });
-  if (!user) {
-    return res.status(404).json({
-      msg: "fail",
-      msg: "No user exists with this e-mail"
-    });
-  }
-
-  //Generate reset token
-  const resetToken = user.createPasswordResetToken();
-  await user.save({ validateBeforeSave: false });
-
   try {
+    const user = await User.findOne({ email: req.body.email });
+    if (!user) {
+      return res.status(404).json({
+        msg: "fail",
+        msg: "No user exists with this e-mail"
+      });
+    }
+
+    //Generate reset token
+    const resetToken = user.createPasswordResetToken();
+    await user.save({ validateBeforeSave: false });
+
     // Send it to user's e-mail
     const resetURL = `${req.protocol}://${req.get(
       "host"
