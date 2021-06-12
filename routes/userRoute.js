@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
+const LikeController = require("../controllers/LikeController");
 
 // Forgot Password
 router.post("/forgotPassword", authController.forgotPassword);
@@ -13,6 +14,8 @@ router.use(authController.protect);
 router.get("/", userController.getAllUsers);
 router.patch("/updateMe", userController.updateMe);
 router.delete("/deleteMe", userController.deleteMe);
+
+router.get("/like", LikeController.getMyLikedTweets);
 
 router
   .route("/:id")
