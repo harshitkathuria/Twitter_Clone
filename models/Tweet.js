@@ -13,18 +13,18 @@ const tweetSchema = new mongoose.Schema(
       maxlength: 260
     },
     media: {
-      type: STRING
+      type: String
     },
     likesCount: {
-      type: INTEGER,
+      type: Number,
       default: 0
     },
     commentsCount: {
-      type: INTEGER,
+      type: Number,
       default: 0
     },
     retweetsCount: {
-      type: INTEGER,
+      type: Number,
       default: 0
     }
   },
