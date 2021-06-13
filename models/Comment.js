@@ -15,7 +15,7 @@ const commentSchema = new mongoose.Schema({
     maxlength: 280
   },
   media: {
-    type: STRING
+    type: String
   }
 });
 
