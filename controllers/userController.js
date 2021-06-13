@@ -33,14 +33,14 @@ exports.getUser = async (req, res) => {
 
 // Update User(by himself)
 exports.updateMe = async (req, res) => {
-  if (req.body.password || req.body.passwordConfirm) {
-    return res.status(400).json({
-      status: "fail",
-      msg: "This router is not for changing password."
-    });
-  }
-
-  const filteredBody = filterObj(req.body, "name", "email");
+  const filteredBody = filterObj(
+    req.body,
+    "name",
+    "email",
+    "bio",
+    "location",
+    "website"
+  );
 
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
