@@ -4,6 +4,7 @@ const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
 const LikeController = require("../controllers/LikeController");
 const connectionController = require("../controllers/connectionController");
+const commentController = require("../controllers/commentController");
 const tweetController = require("../controllers/tweetController");
 
 // Forgot Password
@@ -20,6 +21,8 @@ router.delete("/deleteMe", userController.deleteMe);
 router.get("/tweets/:id", tweetController.getTweetsOfUser);
 
 router.get("/like/:id", LikeController.getLikedTweetsOfUser);
+
+router.get("/comments/:id", commentController.getCommentsOfUser);
 
 router.get("/followers/:id", connectionController.getFollowers);
 router.get("/following/:id", connectionController.getFollowing);
