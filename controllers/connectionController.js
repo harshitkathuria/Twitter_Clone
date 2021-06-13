@@ -56,3 +56,43 @@ exports.unfollow = async (req, res) => {
     });
   }
 };
+
+// Get Followers of an User
+exports.getFollowers = async (req, res) => {
+  try {
+    const followers = (
+      await Connection.find({ followed: req.params.id }).populate("following")
+    ).map(data => data.following);
+    res.status(200).json({
+      status: "success",
+      data: {
+        followers
+      }
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      msg: error.message
+    });
+  }
+};
+
+// Get Followings of an User
+exports.getFollowing = async (req, res) => {
+  try {
+    const followings = (
+      await Connection.find({ following: req.params.id }).populate("followed")
+    ).map(data => data.followed);
+    res.status(200).json({
+      status: "success",
+      data: {
+        followings
+      }
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: "fail",
+      msg: error.message
+    });
+  }
+};
