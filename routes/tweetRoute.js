@@ -13,13 +13,14 @@ router
   .get(tweetController.getAllTweets)
   .post(tweetController.createTweet);
 
-router.get("/user/:id", tweetController.getMyTweet);
+router.get("/like/users/:id", likeController.getLikedUsersOfTweet);
 
 router.post("/like/:id", likeController.likeTweet);
 router.post("/unlike/:id", likeController.unLikeTweet);
 
 router
   .route("/:id")
+  .get(tweetController.getTweet)
   .patch(tweetController.updateMyTweet)
   .delete(tweetController.deleteMyTweet);
 

@@ -79,11 +79,12 @@ exports.unLikeTweet = async (req, res) => {
 };
 
 // Get User's Liked Tweets
-exports.getMyLikedTweets = async (req, res) => {
+exports.getLikedTweetsOfUser = async (req, res) => {
   try {
-    const likedTweets = (
-      await Like.find({ userId: req.user.id }).populate("tweetId")
-    ).map(like => like.tweetId);
+    const userId = req.params.id;
+    const likedTweets = (await Like.find({ userId }).populate("tweetId")).map(
+      data => data.tweetId
+    );
 
     res.status(200).json({
       status: "success",
@@ -93,6 +94,27 @@ exports.getMyLikedTweets = async (req, res) => {
     });
   } catch (err) {
     return res.status(400).json({
+      status: "fail",
+      msg: err.message
+    });
+  }
+};
+
+// Get Users who have liked the tweet
+exports.getLikedUsersOfTweet = async (req, res) => {
+  try {
+    const likedUsers = await Like.find({ tweetId: req.params.id })
+      .populate("userId", "name username")
+      .select("userId");
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        likedUsers
+      }
+    });
+  } catch (err) {
+    res.status(400).json({
       status: "fail",
       msg: err.message
     });

@@ -19,6 +19,25 @@ exports.getAllTweets = async (req, res) => {
   }
 };
 
+// Get Tweet
+exports.getTweet = async (req, res) => {
+  try {
+    const tweet = await Tweet.findById(req.params.id);
+    res.status(200).json({
+      status: "success",
+      data: {
+        tweet
+      }
+    });
+  } catch (err) {
+    console.log(err.message);
+    res.status(400).json({
+      status: "fail",
+      msg: err.message
+    });
+  }
+};
+
 // Create Tweet
 exports.createTweet = async (req, res) => {
   try {
@@ -44,10 +63,10 @@ exports.createTweet = async (req, res) => {
 };
 
 // Get Tweets Of User
-exports.getMyTweet = async (req, res) => {
+exports.getTweetsOfUser = async (req, res) => {
   try {
-    const user = req.user;
-    const tweets = await Tweet.find({ userId: user._id });
+    const user = req.params.id;
+    const tweets = await Tweet.find({ userId });
     res.status(200).json({
       status: "success",
       data: {
