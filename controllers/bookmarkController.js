@@ -40,7 +40,7 @@ exports.removeBookmark = async (req, res) => {
       userId
     });
 
-    res.status(203).json({
+    res.status(204).json({
       status: "success",
       msg: "Successfully removed bookmark",
       data: {
@@ -79,7 +79,7 @@ exports.clearAllBookmarks = async (req, res) => {
     const userId = req.user.id;
     await Bookmark.deleteMany({ userId });
 
-    res.status(203).json({
+    res.status(204).json({
       status: "success",
       msg: "Successfully cleared all bookmarks"
     });

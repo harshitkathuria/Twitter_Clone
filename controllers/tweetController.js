@@ -1,4 +1,7 @@
 const Tweet = require("../models/Tweet");
+const Like = require("../models/Like");
+const Comment = require("../models/Comment");
+const Retweet = require("../models/Retweet");
 
 // Get All Tweets
 exports.getAllTweets = async (req, res) => {
@@ -65,7 +68,7 @@ exports.createTweet = async (req, res) => {
 // Get Tweets Of User
 exports.getTweetsOfUser = async (req, res) => {
   try {
-    const user = req.params.id;
+    const userId = req.params.id;
     const tweets = await Tweet.find({ userId });
     res.status(200).json({
       status: "success",
@@ -107,7 +110,11 @@ exports.updateMyTweet = async (req, res) => {
 // Delete My Tweet
 exports.deleteMyTweet = async (req, res) => {
   try {
-    await Tweet.findOneAndDelete({ _id: req.params.id, userId: req.user.id });
+    const tweetId = req.params.id;
+    await Tweet.findOneAndDelete({ _id: tweetId, userId: req.user.id });
+    await Like.deleteMany({ tweetId });
+    await Comment.deleteMany({ tweetId });
+    await Retweet.deleteMany({ tweetId });
     res
       .status(204)
       .json({ status: "success", msg: "Tweet successfully deleted" });
