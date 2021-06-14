@@ -7,6 +7,7 @@ const connectionController = require("../controllers/connectionController");
 const commentController = require("../controllers/commentController");
 const tweetController = require("../controllers/tweetController");
 const bookmarkController = require("../controllers/bookmarkController");
+const retweetController = require("../controllers/retweetController");
 
 // Forgot Password
 router.post("/forgotPassword", authController.forgotPassword);
@@ -35,6 +36,9 @@ router.get("/following/:id", connectionController.getFollowing);
 // Related To Bookmark
 router.get("/bookmark", bookmarkController.getAllBookmarks);
 router.delete("/bookmark", bookmarkController.clearAllBookmarks);
+
+// Related To Retweet
+router.get("/retweet/:id", retweetController.getRetweetsOfUser);
 
 router
   .route("/:id")

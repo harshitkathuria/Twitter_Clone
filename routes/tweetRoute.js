@@ -6,6 +6,7 @@ const authController = require("../controllers/authController");
 const likeController = require("../controllers/likeController");
 const commentController = require("../controllers/commentController");
 const bookmarkController = require("../controllers/bookmarkController");
+const retweetController = require("../controllers/retweetController");
 
 // For Logged-in users
 router.use(authController.protect);
@@ -28,6 +29,11 @@ router.delete("/comment/remove/:id", commentController.deleteComment);
 // Related To Bookmark
 router.post("/bookmark/:id", bookmarkController.addBookmark);
 router.delete("/bookmark/:id", bookmarkController.removeBookmark);
+
+// Related To Retweet
+router.get("/retweet/:id", retweetController.getRetweetedUsersOfTweet);
+router.post("/retweet/:id", retweetController.createRetweet);
+router.delete("/retweet/:id", retweetController.deleteRetweet);
 
 router
   .route("/:id")
