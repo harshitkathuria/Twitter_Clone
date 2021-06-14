@@ -3,11 +3,13 @@ const mongoose = require("mongoose");
 const commentSchema = new mongoose.Schema({
   userId: {
     type: mongoose.SchemaTypes.ObjectId,
-    ref: "User"
+    ref: "User",
+    required: true
   },
   tweetId: {
     type: mongoose.SchemaTypes.ObjectId,
-    ref: "Tweet"
+    ref: "Tweet",
+    required: true
   },
   text: {
     type: String,
