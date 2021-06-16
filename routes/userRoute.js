@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+
 const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
 const LikeController = require("../controllers/LikeController");
@@ -8,6 +9,7 @@ const commentController = require("../controllers/commentController");
 const tweetController = require("../controllers/tweetController");
 const bookmarkController = require("../controllers/bookmarkController");
 const retweetController = require("../controllers/retweetController");
+const homeExploreController = require("../controllers/homeExploreController");
 
 // Forgot Password
 router.post("/forgotPassword", authController.forgotPassword);
@@ -19,6 +21,10 @@ router.use(authController.protect);
 router.get("/", userController.getAllUsers);
 router.patch("/updateMe", userController.updateMe);
 router.delete("/deleteMe", userController.deleteMe);
+
+// Related To Home And Explore Section
+router.get("/home", homeExploreController.getHomeContent);
+router.get("/explore", homeExploreController.getExploreContent);
 
 // Related To Tweet
 router.get("/tweets/:id", tweetController.getTweetsOfUser);
