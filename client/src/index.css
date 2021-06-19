@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .heading-xl {
+    font-size: 3.5rem;
+    font-weight: bold;
+  }
+}
