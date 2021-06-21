@@ -1,4 +1,10 @@
-import { LOGIN_USER, SIGNUP_USER, AUTH_FAIL } from "../actions/types";
+import {
+  LOGIN_USER,
+  SIGNUP_USER,
+  AUTH_FAIL,
+  EMAIL_FAIL,
+  RESET_PASSWORD_FAIL
+} from "../actions/types";
 
 const initialState = {
   user: null,
@@ -18,6 +24,8 @@ const authReducer = (state = initialState, action) => {
         loading: false
       };
     case AUTH_FAIL:
+    case EMAIL_FAIL:
+    case RESET_PASSWORD_FAIL:
       return {
         ...state,
         error: action.payload
