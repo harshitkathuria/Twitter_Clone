@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { useDispatch } from "react-redux";
+
 import Logo from "../layout/Logo";
+import { sendResetPasswordEmail } from "../../redux/actions/authAction";
 
 const ForgetPassword = () => {
+  const [email, setEmail] = useState("");
+  const dispatch = useDispatch();
+
+  const onChange = e => {
+    setEmail(e.target.value);
+  };
+
   const onSubmit = e => {
     e.preventDefault();
+    dispatch(sendResetPasswordEmail({ email }));
     document.getElementById("before-sending").style.display = "none";
     document.getElementById("after-sending").style.display = "block";
   };
@@ -31,6 +42,8 @@ const ForgetPassword = () => {
                 type="email"
                 name="email"
                 id="email"
+                value={email}
+                onChange={onChange}
                 required
                 className="mt-3 px-4 py-1 w-2/3 rounded-full block border-2 border-gray-300 focus:outline-none focus:border-blue focus:ring-1"
               />
