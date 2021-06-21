@@ -6,10 +6,8 @@ import store from "./redux/store";
 import Home from "./components/Home";
 import Login from "./components/Auth/Login";
 import Signup from "./components/Auth/Signup";
-import SideBar from "./components/layout/SideBar";
 import ForgetPassword from "./components/Auth/ForgetPassword";
-
-import PrivateRoute from "./components/utils/PrivateRoute";
+import ResetPassword from "./components/Auth/ResetPassword";
 
 function App() {
   return (
@@ -18,10 +16,10 @@ function App() {
         <Router>
           <Switch>
             <Route exact path="/" component={Home} />
-            <PrivateRoute exact path="/home" component={SideBar} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/signup" component={Signup} />
             <Route exact path="/forgotPassword" component={ForgetPassword} />
+            <Route path="/resetPassword" component={ResetPassword} />
           </Switch>
         </Router>
       </div>
