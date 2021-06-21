@@ -5,7 +5,8 @@ import {
   AUTH_FAIL,
   EMAIL_SUCCESS,
   EMAIL_FAIL,
-  RESET_PASSWORD_FAIL
+  RESET_PASSWORD_FAIL,
+  CLEAR_ERROR
 } from "./types";
 
 export const signup = user => {
@@ -103,5 +104,11 @@ export const resetPassword = data => {
         payload: err.response.data.msg
       });
     }
+  };
+};
+
+export const clearError = () => {
+  return {
+    type: CLEAR_ERROR
   };
 };
