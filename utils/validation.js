@@ -3,6 +3,7 @@ const Joi = require("joi");
 exports.signUpUserValidation = data => {
   const schema = Joi.object({
     name: Joi.string().required(),
+    username: Joi.string().required(),
     email: Joi.string().email().required(),
     DOB: Joi.date().required(),
     password: Joi.string().required(),
