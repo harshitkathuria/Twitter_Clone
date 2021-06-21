@@ -5,3 +5,5 @@ export const EMAIL_FAIL = "EMAIL_FAIL";
 export const RESET_PASSWORD_SUCCESS = "RESET_PASSWORD_SUCCESS";
 export const RESET_PASSWORD_FAIL = "RESET_PASSWORD_FAIL";
 export const AUTH_FAIL = "AUTH_FAIL";
+export const SET_ALERT = "SET_ALERT";
+export const REMOVE_ALERT = "REMOVE_ALERT";
