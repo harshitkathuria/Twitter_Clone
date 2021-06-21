@@ -1,0 +1,18 @@
+.alert {
+  max-width: 30%;
+  padding: 8px;
+  border-radius: 5px;
+  font-size: 1.2rem;
+  text-align: center;
+  margin-bottom: 0.3rem;
+}
+
+.primary {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.danger {
+  background-color: rgb(255, 210, 218);
+  color: black;
+}
