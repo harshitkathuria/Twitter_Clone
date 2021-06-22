@@ -25,7 +25,7 @@ const Login = props => {
     }
 
     if (error) {
-      dispatch(setAlert(error, "danger"));
+      dispatch(setAlert(error, "error"));
       dispatch(clearError());
     }
   }, [error, isAuthenticated, props.history]);

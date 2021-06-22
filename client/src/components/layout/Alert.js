@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
+import { useAlert } from "react-alert";
 
 const Alert = () => {
   const alert = useSelector(state => state.alert);
+  const reactAlert = useAlert();
+  useEffect(() => {
+    if (alert) {
+      reactAlert.show(alert.msg, {
+        type: alert.type
+      });
+    }
+  }, [alert]);
 
-  const alertClass = "alert mt-3 mx-auto";
-  return (
-    alert && <div className={alertClass + ` ${alert.type}`}>{alert.msg}</div>
-  );
+  return <></>;
 };
 
 export default Alert;

@@ -31,7 +31,7 @@ const Signup = props => {
     }
 
     if (error) {
-      dispatch(setAlert(error, "danger"));
+      dispatch(setAlert(error, "error"));
       dispatch(clearError());
     }
   }, [error, isAuthenticated, props.history]);
@@ -43,7 +43,7 @@ const Signup = props => {
   const onSubmit = e => {
     e.preventDefault();
     if (user.password !== user.confirmPassword) {
-      dispatch(setAlert("Passwords do not match", "primary"));
+      dispatch(setAlert("Passwords do not match", "error"));
     } else {
       let userData = { ...user };
       userData.name = user.firstname + " " + user.lastname;

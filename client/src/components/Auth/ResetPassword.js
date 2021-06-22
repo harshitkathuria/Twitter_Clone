@@ -25,7 +25,7 @@ const ResetPassword = () => {
   const onSubmit = e => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      dispatch(setAlert("Passwords do not match", "primary"));
+      dispatch(setAlert("Passwords do not match", "error"));
     } else {
       dispatch(resetPassword(state));
       document.getElementById("before-reset").style.display = "none";
