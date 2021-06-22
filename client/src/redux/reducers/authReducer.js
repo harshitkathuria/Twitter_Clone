@@ -4,36 +4,48 @@ import {
   AUTH_FAIL,
   EMAIL_FAIL,
   RESET_PASSWORD_FAIL,
-  CLEAR_ERROR
+  CLEAR_ERROR,
+  USER_LOADED
 } from "../actions/types";
 
 const initialState = {
   user: null,
-  isAuthenticated: false,
+  isAuthenticated: null,
   loading: true,
   error: null
 };
 
 const authReducer = (state = initialState, action) => {
   switch (action.type) {
-    case LOGIN_USER:
-    case SIGNUP_USER:
+    case USER_LOADED:
       return {
         ...state,
         user: action.payload,
         isAuthenticated: true,
         loading: false
       };
+
+    case LOGIN_USER:
+    case SIGNUP_USER:
+      localStorage.setItem("token", action.payload.token);
+      return {
+        ...state,
+        user: action.payload.data.user,
+        isAuthenticated: true,
+        loading: false
+      };
+
     case AUTH_FAIL:
     case EMAIL_FAIL:
     case RESET_PASSWORD_FAIL:
       return {
         ...state,
-        isAuthenticated: false,
+        isAuthenticated: null,
         user: null,
         loading: true,
         error: action.payload
       };
+
     case CLEAR_ERROR:
       return {
         ...state,

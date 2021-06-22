@@ -35,6 +35,9 @@ exports.protect = async (req, res, next) => {
     ) {
       token = req.headers.authorization.split(" ")[1];
     }
+    if (!token) {
+      token = req.header("x-auth-token");
+    }
 
     if (!token) {
       return res.status(401).json({
@@ -71,6 +74,17 @@ exports.protect = async (req, res, next) => {
       status: "fail",
       msg: err.message
     });
+  }
+};
+
+// Get User from token
+exports.getUserFromToken = async (req, res) => {
+  try {
+    const user = await User.findById(req.user).select("-password");
+    res.status(200).json({ status: "success", data: { user } });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ status: "fail", msg: "Server Error" });
   }
 };
 

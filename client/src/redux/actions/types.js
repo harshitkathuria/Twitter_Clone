@@ -1,3 +1,4 @@
+export const USER_LOADED = "USER_LOADED";
 export const SIGNUP_USER = "SIGNUP_USER";
 export const LOGIN_USER = "LOGIN_USER";
 export const EMAIL_SUCCESS = "EMAIL_SUCCESS";

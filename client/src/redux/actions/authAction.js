@@ -6,8 +6,11 @@ import {
   EMAIL_SUCCESS,
   EMAIL_FAIL,
   RESET_PASSWORD_FAIL,
-  CLEAR_ERROR
+  CLEAR_ERROR,
+  USER_LOADED
 } from "./types";
+
+import setAuthToken from "../../components/utils/setAuthToken";
 
 export const signup = user => {
   return async dispatch => {
@@ -20,8 +23,9 @@ export const signup = user => {
       const res = await axios.post("/api/auth/signup", user, config);
       dispatch({
         type: SIGNUP_USER,
-        payload: res.data.data.user
+        payload: res.data
       });
+      loadUser();
     } catch (err) {
       console.log(err.response.data.msg);
       dispatch({
@@ -43,14 +47,33 @@ export const login = user => {
       const res = await axios.post("/api/auth/login", user, config);
       dispatch({
         type: LOGIN_USER,
-        payload: res.data.data.user
+        payload: res.data
       });
+      loadUser();
     } catch (err) {
       console.log(err.response.data.msg);
       dispatch({
         type: AUTH_FAIL,
         payload: err.response.data.msg
       });
+    }
+  };
+};
+
+export const loadUser = () => {
+  return async dispatch => {
+    if (localStorage.token) {
+      setAuthToken(localStorage.token);
+    }
+
+    try {
+      const res = await axios.get("/api/auth");
+      dispatch({
+        type: USER_LOADED,
+        payload: res.data.data
+      });
+    } catch (err) {
+      dispatch({ type: AUTH_FAIL });
     }
   };
 };
