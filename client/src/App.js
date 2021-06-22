@@ -8,18 +8,31 @@ import Login from "./components/Auth/Login";
 import Signup from "./components/Auth/Signup";
 import ForgetPassword from "./components/Auth/ForgetPassword";
 import ResetPassword from "./components/Auth/ResetPassword";
+import LoadUser from "./components/Auth/LoadUser";
+
+import NonLoggedRoute from "./components/utils/NonLoggedRoute";
+import setAuthToken from "./components/utils/setAuthToken";
+
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
+}
 
 function App() {
   return (
     <Provider store={store}>
       <div className="App">
+        <LoadUser />
         <Router>
           <Switch>
-            <Route exact path="/" component={Home} />
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/signup" component={Signup} />
-            <Route exact path="/forgotPassword" component={ForgetPassword} />
-            <Route path="/resetPassword" component={ResetPassword} />
+            <NonLoggedRoute exact path="/" component={Home} />
+            <NonLoggedRoute exact path="/login" component={Login} />
+            <NonLoggedRoute exact path="/signup" component={Signup} />
+            <NonLoggedRoute
+              exact
+              path="/forgotPassword"
+              component={ForgetPassword}
+            />
+            <NonLoggedRoute path="/resetPassword" component={ResetPassword} />
           </Switch>
         </Router>
       </div>
