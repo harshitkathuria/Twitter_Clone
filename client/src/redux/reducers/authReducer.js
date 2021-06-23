@@ -5,7 +5,8 @@ import {
   EMAIL_FAIL,
   RESET_PASSWORD_FAIL,
   CLEAR_ERROR,
-  USER_LOADED
+  USER_LOADED,
+  FAIL
 } from "../actions/types";
 
 const initialState = {
@@ -38,9 +39,10 @@ const authReducer = (state = initialState, action) => {
     case AUTH_FAIL:
     case EMAIL_FAIL:
     case RESET_PASSWORD_FAIL:
+    case FAIL:
       return {
         ...state,
-        isAuthenticated: null,
+        isAuthenticated: false,
         user: null,
         loading: true,
         error: action.payload
