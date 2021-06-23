@@ -1,5 +1,5 @@
 import "./App.css";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "./redux/store";
 
@@ -10,6 +10,9 @@ import ForgetPassword from "./components/Auth/ForgetPassword";
 import ResetPassword from "./components/Auth/ResetPassword";
 import LoadUser from "./components/Auth/LoadUser";
 
+import Overview from "./components/Pages/Overview";
+
+import PrivateRoute from "./components/utils/PrivateRoute";
 import NonLoggedRoute from "./components/utils/NonLoggedRoute";
 import setAuthToken from "./components/utils/setAuthToken";
 
@@ -25,6 +28,7 @@ function App() {
         <Router>
           <Switch>
             <NonLoggedRoute exact path="/" component={Home} />
+            <PrivateRoute exact path="/home" component={Overview} />
             <NonLoggedRoute exact path="/login" component={Login} />
             <NonLoggedRoute exact path="/signup" component={Signup} />
             <NonLoggedRoute
