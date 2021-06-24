@@ -1,7 +1,7 @@
-import { HOME_FEED_SUCCESS } from "../actions/types";
+import { CREATE_TWEET, HOME_FEED_SUCCESS } from "../actions/types";
 
 const initialState = {
-  data: null
+  homeFeed: null
 };
 
 const userReducer = (state = initialState, action) => {
@@ -9,7 +9,12 @@ const userReducer = (state = initialState, action) => {
     case HOME_FEED_SUCCESS:
       return {
         ...state,
-        data: action.payload
+        homeFeed: action.payload
+      };
+    case CREATE_TWEET:
+      return {
+        ...state,
+        homeFeed: [action.payload, ...state.homeFeed]
       };
     default:
       return state;
