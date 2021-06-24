@@ -13,7 +13,7 @@ const SideBar = () => {
   }, []);
 
   return (
-    <aside className="max-w-xs w-1/5 ml-32 py-1 h-screen border-r-2 border-gray-200">
+    <aside className="max-w-xs w-1/5 ml-32 py-1 h-screen border-r-2 border-gray-200 fixed top-0 left-0 z-10">
       <div className="flex flex-col justify-between h-full">
         <div className="flex flex-col items-start p-1">
           <div className="logo mb-2">

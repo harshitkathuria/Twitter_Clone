@@ -21,7 +21,7 @@ const authReducer = (state = initialState, action) => {
     case USER_LOADED:
       return {
         ...state,
-        user: action.payload,
+        user: action.payload.user,
         isAuthenticated: true,
         loading: false
       };
@@ -39,7 +39,6 @@ const authReducer = (state = initialState, action) => {
     case AUTH_FAIL:
     case EMAIL_FAIL:
     case RESET_PASSWORD_FAIL:
-    case FAIL:
       return {
         ...state,
         isAuthenticated: false,
@@ -48,6 +47,11 @@ const authReducer = (state = initialState, action) => {
         error: action.payload
       };
 
+    case FAIL:
+      return {
+        ...state,
+        error: action.payload
+      };
     case CLEAR_ERROR:
       return {
         ...state,

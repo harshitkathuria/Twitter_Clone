@@ -2,11 +2,11 @@ import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { loadHomeFeed } from "../../redux/actions/userAction";
 
-// import Tweet from "../Tweet/Tweet";
-// import Retweet from "../Tweet/Retweet";
+import Tweet from "../Tweet/Tweet";
+import Retweet from "../Tweet/Retweet";
 
 const HomeFeed = () => {
-  const tweets = useSelector(state => state.user.data);
+  const tweets = useSelector(state => state.user.homeFeed);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -15,11 +15,11 @@ const HomeFeed = () => {
 
   return (
     <div>
-      {/* {tweets &&
+      {tweets &&
         tweets.map(data => {
           if (data.tweetId) return <Retweet key={data._id} data={data} />;
           else return <Tweet key={data._id} tweet={data} />;
-        })} */}
+        })}
     </div>
   );
 };
