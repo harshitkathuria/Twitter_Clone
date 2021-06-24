@@ -13,7 +13,9 @@ exports.getHomeContent = async (req, res) => {
       const tweetArr = await Tweet.find({
         userId: followings[i].followed
       }).populate("userId", "name username");
-      const retweetArr = await Retweet.find({ userId: followings[i].followed });
+      const retweetArr = await Retweet.find({
+        userId: followings[i].followed
+      }).populate("tweetId");
       result = result.concat(tweetArr, retweetArr);
     }
     // Get logged in user's tweets and retweets
@@ -23,7 +25,11 @@ exports.getHomeContent = async (req, res) => {
         "name username"
       )
     );
-    result = result.concat(await Retweet.find({ userId: req.user.id }));
+    result = result.concat(
+      await Retweet.find({ userId: req.user.id })
+        .populate("tweetId")
+        .populate("userId", "name")
+    );
 
     // Sort all tweets according to the date in descending order
     result.sort(function (tweet1, tweet2) {
