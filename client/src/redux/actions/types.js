@@ -1,4 +1,5 @@
 export const USER_LOADED = "USER_LOADED";
+export const GET_USER = "GET_USER";
 export const SIGNUP_USER = "SIGNUP_USER";
 export const LOGIN_USER = "LOGIN_USER";
 export const EMAIL_SUCCESS = "EMAIL_SUCCESS";
@@ -8,7 +9,10 @@ export const RESET_PASSWORD_FAIL = "RESET_PASSWORD_FAIL";
 export const AUTH_FAIL = "AUTH_FAIL";
 export const CLEAR_ERROR = "CLEAR_ERROR";
 export const HOME_FEED_SUCCESS = "HOME_FEED_SUCCESS";
+export const GET_FOLLOWERS_SUCCESS = "GET_FOLLOWERS_SUCCESS";
+export const GET_FOLLOWINGS_SUCCESS = "GET_FOLLOWINGS_SUCCESS";
 export const FAIL = "FAIL";
 export const SET_ALERT = "SET_ALERT";
 export const REMOVE_ALERT = "REMOVE_ALERT";
 export const CREATE_TWEET = "CREATE_TWEET";
+export const GET_TWEETS_AND_RETWEETS = "GET_TWEETS_AND_RETWEETS";
