@@ -45,10 +45,11 @@ exports.getTweet = async (req, res) => {
 exports.createTweet = async (req, res) => {
   try {
     const user = req.user;
-    const tweet = await Tweet.create({
+    let tweet = await Tweet.create({
       userId: user._id,
       text: req.body.text
     });
+    tweet = await tweet.populate("userId", "name username").execPopulate();
 
     res.status(201).json({
       status: "success",
@@ -69,10 +70,13 @@ exports.createTweet = async (req, res) => {
 exports.getTweetsOfUser = async (req, res) => {
   try {
     const userId = req.params.id;
-    const tweets = await Tweet.find({ userId });
+    const tweets = await Tweet.find({ userId })
+      .populate("userId", "name username")
+      .sort("-createdAt");
     res.status(200).json({
       status: "success",
       data: {
+        length: tweets.length,
         tweets
       }
     });

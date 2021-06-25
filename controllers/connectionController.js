@@ -66,13 +66,14 @@ exports.getFollowers = async (req, res) => {
     res.status(200).json({
       status: "success",
       data: {
+        length: followers.length,
         followers
       }
     });
   } catch (err) {
     res.status(400).json({
       status: "fail",
-      msg: error.message
+      msg: err.message
     });
   }
 };
@@ -86,13 +87,14 @@ exports.getFollowing = async (req, res) => {
     res.status(200).json({
       status: "success",
       data: {
+        length: followings.length,
         followings
       }
     });
   } catch (err) {
     res.status(400).json({
       status: "fail",
-      msg: error.message
+      msg: err.message
     });
   }
 };
