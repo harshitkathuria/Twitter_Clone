@@ -1,8 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { setAlert } from "../../redux/actions/alertAction";
+
+import { deleteTweet } from "../../redux/actions/tweetAction";
 
 const Tweet = ({ tweet }) => {
   const {
+    _id: tweetId,
     userId: { _id, name, username },
     text,
     createdAt,
@@ -11,12 +16,20 @@ const Tweet = ({ tweet }) => {
     commentsCount
   } = tweet;
 
+  const user = useSelector(state => state.auth.user);
+  const dispatch = useDispatch();
+
+  const onDeleteTweet = () => {
+    dispatch(deleteTweet(tweetId));
+    dispatch(setAlert("Your tweet was deleted", "success"));
+  };
+
   return (
     <div className="border-b-2 border-gray-200 flex px-2 pt-3">
       <div className="flex flex-col flex-grow-0 flex-shrink-0 items-center mr-3">
         <div id="img-wrapper" className="flex flex-grow-0 w-full">
           <Link
-            to={`/${_id}`}
+            to={`/profile/${_id}`}
             className="flex items-center justify-center w-full"
           >
             <img
@@ -28,30 +41,43 @@ const Tweet = ({ tweet }) => {
         </div>
       </div>
       <div className="pb-3 flex flex-col justify-center flex-grow-1 w-full">
-        <div className="flex items-start mb-1">
-          <div id="user-name">
-            <Link to={`/${_id}`}>
-              <p>
-                <span className="text-base leading-6 font-bold font text-black">
-                  {name}
-                </span>
-                <span className="ml-1 text-gray-500">{`@${username}`}</span>
-              </p>
-            </Link>
+        <div className="flex items-start justify-between mb-1">
+          <div className="flex items-start">
+            <div id="user-name">
+              <Link to={`/profile/${_id}`}>
+                <p>
+                  <span className="text-base leading-6 font-bold font text-black">
+                    {name}
+                  </span>
+                  <span className="ml-1 text-gray-500">{`@${username}`}</span>
+                </p>
+              </Link>
+            </div>
+            <div
+              id="dot-break"
+              className="flex-shrink-0 font-normal text-sm px-1"
+            >
+              .
+            </div>
+            <div id="date">
+              <span className="text-gray-500">
+                {new Date(createdAt).toLocaleString("default", {
+                  dateStyle: "long"
+                })}
+              </span>
+            </div>
           </div>
-          <div
-            id="dot-break"
-            className="flex-shrink-0 font-normal text-sm px-1"
-          >
-            .
-          </div>
-          <div id="date">
-            <span className="text-gray-500">
-              {new Date(createdAt).toLocaleString("default", {
-                dateStyle: "long"
-              })}
-            </span>
-          </div>
+          {_id === user._id && (
+            <div
+              onClick={onDeleteTweet}
+              id="delete"
+              className="text-red-600 cursor-pointer font-semibold"
+            >
+              Delete
+              {/* Delete <i className="fas fa-minus-circle"></i> */}
+              {/* <i className="fas fa-times-circle"></i> */}
+            </div>
+          )}
         </div>
         <div id="tweet-info" className="flex flex-col w-full">
           <div id="tweet-text" className="w-full">
