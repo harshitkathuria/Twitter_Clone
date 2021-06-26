@@ -1,5 +1,7 @@
 import {
   CREATE_TWEET,
+  DELETE_RETWEET,
+  DELETE_TWEET,
   GET_FOLLOWERS_SUCCESS,
   GET_FOLLOWINGS_SUCCESS,
   GET_TWEETS_AND_RETWEETS,
@@ -31,6 +33,19 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         homeFeed: [action.payload, ...state.homeFeed]
+      };
+    case DELETE_TWEET:
+    case DELETE_RETWEET:
+      return {
+        ...state,
+        homeFeed: state.homeFeed
+          ? state.homeFeed.filter(tweet => tweet._id !== action.payload)
+          : null,
+        tweetsAndRetweets: state.tweetsAndRetweets
+          ? state.tweetsAndRetweets.filter(
+              tweetOrRetweet => tweetOrRetweet._id !== action.payload
+            )
+          : null
       };
     case GET_FOLLOWERS_SUCCESS:
       return {
