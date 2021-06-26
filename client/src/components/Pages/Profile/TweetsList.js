@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { getUserTweetsAndRetweets } from "../../../redux/actions/userAction";
 
 import Tweet from "../../Tweet/Tweet";
+import Retweet from "../../Tweet/Retweet";
 
 const TweetsList = ({ id }) => {
   const dispatch = useDispatch();
@@ -10,11 +11,15 @@ const TweetsList = ({ id }) => {
 
   useEffect(() => {
     dispatch(getUserTweetsAndRetweets(id));
-  }, []);
+  }, [id]);
 
   return (
     <div>
-      {tweets && tweets.map(tweet => <Tweet key={tweet._id} tweet={tweet} />)}
+      {tweets &&
+        tweets.map(data => {
+          if (data.tweetId) return <Retweet key={data._id} data={data} />;
+          else return <Tweet key={data._id} tweet={data} />;
+        })}
     </div>
   );
 };

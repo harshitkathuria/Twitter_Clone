@@ -21,7 +21,7 @@ const Profile = ({ id }) => {
     dispatch(getUser(id));
     dispatch(getFollowers(id));
     dispatch(getFollowings(id));
-  }, []);
+  }, [id]);
 
   return user && followersData && followingsData ? (
     <section
