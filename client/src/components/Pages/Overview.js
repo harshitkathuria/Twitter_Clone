@@ -1,20 +1,10 @@
-import React, { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import React from "react";
 
 import SideBar from "../layout/SideBar/SideBar";
-import Home from "./Home";
-// import Profile from "./Profile";
 
-const Overview = () => {
-  const location = useLocation();
-  console.log(location.pathname);
+const Overview = ({ page: Page, match }) => {
   const renderPage = () => {
-    switch (location.pathname) {
-      case "/home":
-        return <Home />;
-      // case "/profile":
-      //   return <Profile />;
-    }
+    return <Page id={match.params.id} />;
   };
 
   return (

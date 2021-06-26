@@ -9,8 +9,11 @@ import Signup from "./components/Auth/Signup";
 import ForgetPassword from "./components/Auth/ForgetPassword";
 import ResetPassword from "./components/Auth/ResetPassword";
 import LoadUser from "./components/Auth/LoadUser";
+import Alert from "./components/layout/Alert";
 
 import Overview from "./components/Pages/Overview";
+import AuthHome from "./components/Pages/Home";
+import Profile from "./components/Pages/Profile/Profile";
 
 import PrivateRoute from "./components/utils/PrivateRoute";
 import NonLoggedRoute from "./components/utils/NonLoggedRoute";
@@ -25,10 +28,10 @@ function App() {
     <Provider store={store}>
       <div className="App">
         <LoadUser />
+        <Alert />
         <Router>
           <Switch>
             <NonLoggedRoute exact path="/" component={Home} />
-            <PrivateRoute exact path="/home" component={Overview} />
             <NonLoggedRoute exact path="/login" component={Login} />
             <NonLoggedRoute exact path="/signup" component={Signup} />
             <NonLoggedRoute
@@ -37,6 +40,12 @@ function App() {
               component={ForgetPassword}
             />
             <NonLoggedRoute path="/resetPassword" component={ResetPassword} />
+            <PrivateRoute path="/home" component={Overview} page={AuthHome} />
+            <PrivateRoute
+              path="/profile/:id"
+              component={Overview}
+              page={Profile}
+            />
           </Switch>
         </Router>
       </div>

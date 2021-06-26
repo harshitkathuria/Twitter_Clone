@@ -2,7 +2,7 @@ import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-const PrivateRoute = ({ component: Component, ...rest }) => {
+const PrivateRoute = ({ component: Component, page, ...rest }) => {
   const state = useSelector(state => state.auth);
   const { isAuthenticated, loading } = state;
   return (
@@ -11,7 +11,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
       render={props =>
         isAuthenticated !== null &&
         (isAuthenticated === true && !loading ? (
-          <Component {...props} />
+          <Component {...props} page={page} />
         ) : (
           <Redirect to="/login" />
         ))
