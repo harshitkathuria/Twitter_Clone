@@ -1,5 +1,28 @@
 import axios from "axios";
-import { CREATE_TWEET, DELETE_RETWEET, DELETE_TWEET, FAIL } from "./types";
+import {
+  CREATE_TWEET,
+  DELETE_RETWEET,
+  DELETE_TWEET,
+  FAIL,
+  HOME_FEED_SUCCESS
+} from "./types";
+
+export const loadHomeFeed = () => {
+  return async dispatch => {
+    try {
+      const res = await axios.get("/api/users/home");
+      dispatch({
+        type: HOME_FEED_SUCCESS,
+        payload: res.data.data.result
+      });
+    } catch (err) {
+      dispatch({
+        type: FAIL,
+        payload: err.response.data.msg
+      });
+    }
+  };
+};
 
 export const createTweet = data => {
   return async dispatch => {

@@ -1,29 +1,11 @@
 import axios from "axios";
 import {
-  HOME_FEED_SUCCESS,
   FAIL,
   GET_FOLLOWERS_SUCCESS,
   GET_FOLLOWINGS_SUCCESS,
   GET_TWEETS_AND_RETWEETS,
   GET_USER
 } from "./types";
-
-export const loadHomeFeed = () => {
-  return async dispatch => {
-    try {
-      const res = await axios.get("/api/users/home");
-      dispatch({
-        type: HOME_FEED_SUCCESS,
-        payload: res.data.data.result
-      });
-    } catch (err) {
-      dispatch({
-        type: FAIL,
-        payload: err.response.data.msg
-      });
-    }
-  };
-};
 
 export const getUser = id => {
   return async dispatch => {
@@ -79,10 +61,14 @@ export const getFollowings = id => {
 export const getUserTweetsAndRetweets = id => {
   return async dispatch => {
     try {
-      const res = await axios.get(`/api/users/tweets/${id}`);
+      const tweets = (await axios.get(`/api/users/tweets/${id}`)).data.data
+        .tweets;
+      const retweets = (await axios.get(`/api/users/retweet/${id}`)).data.data
+        .retweets;
+      const res = tweets.concat(retweets);
       dispatch({
         type: GET_TWEETS_AND_RETWEETS,
-        payload: res.data.data.tweets
+        payload: res
       });
     } catch (err) {
       dispatch({

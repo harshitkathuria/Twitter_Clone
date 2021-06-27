@@ -7,7 +7,8 @@ import {
   EMAIL_FAIL,
   RESET_PASSWORD_FAIL,
   CLEAR_ERROR,
-  USER_LOADED
+  USER_LOADED,
+  LOGOUT_USER
 } from "./types";
 
 import setAuthToken from "../../components/utils/setAuthToken";
@@ -52,6 +53,20 @@ export const login = user => {
       loadUser();
     } catch (err) {
       console.log(err.response.data.msg);
+      dispatch({
+        type: AUTH_FAIL,
+        payload: err.response.data.msg
+      });
+    }
+  };
+};
+
+export const logout = () => {
+  return async dispatch => {
+    try {
+      setAuthToken();
+      dispatch({ type: LOGOUT_USER });
+    } catch (err) {
       dispatch({
         type: AUTH_FAIL,
         payload: err.response.data.msg
