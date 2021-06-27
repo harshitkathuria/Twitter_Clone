@@ -29,6 +29,7 @@ body {
 
 #tweet-affiliation #comment:hover svg,
 #tweet-affiliation #share:hover svg {
+  fill: rgb(29, 161, 242);
   stroke: rgb(29, 161, 242);
 }
 #tweet-affiliation #comment:hover {
@@ -36,15 +37,38 @@ body {
 }
 
 #tweet-affiliation #retweet:hover svg {
+  fill: rgb(23, 191, 99);
   stroke: rgb(23, 191, 99);
 }
 #tweet-affiliation #retweet:hover {
   color: rgb(23, 191, 99);
 }
 
-#tweet-affiliation #like:hover svg {
-  stroke: rgb(224, 36, 94);
-}
 #tweet-affiliation #like:hover {
   color: rgb(224, 36, 94);
+}
+
+/* Spinner */
+.spinner {
+  border-top-color: #3498db;
+  -webkit-animation: spinner 1.5s linear infinite;
+  animation: spinner 1.5s linear infinite;
+}
+
+@-webkit-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

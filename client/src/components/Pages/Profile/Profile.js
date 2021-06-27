@@ -8,6 +8,7 @@ import {
   getUser
 } from "../../../redux/actions/userAction";
 import TweetsList from "./TweetsList";
+import Spinner from "../../layout/Spinner";
 
 const Profile = ({ id }) => {
   const user = useSelector(state => state.user.user);
@@ -215,7 +216,9 @@ const Profile = ({ id }) => {
       <TweetsList id={id} />
     </section>
   ) : (
-    ""
+    <div className="mt-4 w-full flex justify-center items-center">
+      <Spinner />
+    </div>
   );
 };
 

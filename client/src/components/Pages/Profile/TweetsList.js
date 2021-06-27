@@ -5,9 +5,11 @@ import { getUserTweetsAndRetweets } from "../../../redux/actions/userAction";
 import Tweet from "../../Tweet/Tweet";
 import Retweet from "../../Tweet/Retweet";
 
+import Spinner from "../../layout/Spinner";
+
 const TweetsList = ({ id }) => {
   const dispatch = useDispatch();
-  const tweets = useSelector(state => state.user.tweetsAndRetweets);
+  const tweets = useSelector(state => state.tweet.tweetsAndRetweets);
 
   useEffect(() => {
     dispatch(getUserTweetsAndRetweets(id));
@@ -15,11 +17,16 @@ const TweetsList = ({ id }) => {
 
   return (
     <div>
-      {tweets &&
+      {tweets ? (
         tweets.map(data => {
           if (data.tweetId) return <Retweet key={data._id} data={data} />;
           else return <Tweet key={data._id} tweet={data} />;
-        })}
+        })
+      ) : (
+        <div className="mt-4 w-full flex justify-center items-center">
+          <Spinner />
+        </div>
+      )}
     </div>
   );
 };
