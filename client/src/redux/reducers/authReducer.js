@@ -6,7 +6,8 @@ import {
   RESET_PASSWORD_FAIL,
   CLEAR_ERROR,
   USER_LOADED,
-  FAIL
+  FAIL,
+  LOGOUT_USER
 } from "../actions/types";
 
 const initialState = {
@@ -36,6 +37,8 @@ const authReducer = (state = initialState, action) => {
         loading: false
       };
 
+    case LOGOUT_USER:
+      localStorage.removeItem("token");
     case AUTH_FAIL:
     case EMAIL_FAIL:
     case RESET_PASSWORD_FAIL:
