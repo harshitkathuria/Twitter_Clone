@@ -4,7 +4,10 @@ import {
   DELETE_RETWEET,
   DELETE_TWEET,
   FAIL,
-  HOME_FEED_SUCCESS
+  GET_LIKED_TWEETS_OF_USER,
+  HOME_FEED_SUCCESS,
+  LIKE_TWEET,
+  UNLIKE_TWEET
 } from "./types";
 
 export const loadHomeFeed = () => {
@@ -36,6 +39,59 @@ export const createTweet = data => {
       dispatch({
         type: CREATE_TWEET,
         payload: res.data.data.tweet
+      });
+    } catch (err) {
+      dispatch({
+        type: FAIL,
+        payload: err.response.data.msg
+      });
+    }
+  };
+};
+
+export const likeTweet = tweet => {
+  return async dispatch => {
+    try {
+      await axios.post(`/api/tweets/like/${tweet._id}`);
+      dispatch({
+        type: LIKE_TWEET,
+        payload: tweet
+      });
+    } catch (err) {
+      console.log(err);
+      dispatch({
+        type: FAIL,
+        payload: err.response.data.msg
+      });
+    }
+  };
+};
+
+export const unlikeTweet = tweet => {
+  return async dispatch => {
+    try {
+      await axios.post(`/api/tweets/unlike/${tweet._id}`);
+      dispatch({
+        type: UNLIKE_TWEET,
+        payload: tweet
+      });
+    } catch (err) {
+      console.log(err);
+      dispatch({
+        type: FAIL,
+        payload: err.response.data.msg
+      });
+    }
+  };
+};
+
+export const getLikedTweetsOfUser = id => {
+  return async dispatch => {
+    try {
+      const res = await axios.get(`/api/users/like/${id}`);
+      dispatch({
+        type: GET_LIKED_TWEETS_OF_USER,
+        payload: res.data.data.likedTweets
       });
     } catch (err) {
       dispatch({

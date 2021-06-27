@@ -1,4 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+
+import { createTweet } from "../../redux/actions/tweetAction";
+import { setAlert } from "../../redux/actions/alertAction";
+
 import HomeFeed from "./HomeFeed";
 
 const Home = () => {
@@ -6,10 +11,23 @@ const Home = () => {
     document.title = "Home / Twitter";
   }, []);
 
+  const [text, setText] = useState("");
+  const dispatch = useDispatch();
+
+  const onChange = e => {
+    setText(e.target.value);
+  };
+
+  const postTweet = () => {
+    dispatch(createTweet({ text }));
+    setText("");
+    dispatch(setAlert("Your tweet was sent", "info"));
+  };
+
   return (
     <div
       className="flex flex-col w-2/5 border-r-2 border-gray-200"
-      style={{ marginLeft: "calc(20% + 8rem)" }}
+      style={{ marginLeft: "calc(20% + 8rem - 4px)" }}
     >
       <div className="flex border-b-2 border-gray-200">
         <div className="flex-1 m-2">
@@ -26,10 +44,13 @@ const Home = () => {
         </div>
         <div className="flex-1 px-2 pt-2 mt-2">
           <textarea
+            id="tweet-text"
             className=" bg-transparent text-black font-normal text-xl w-full focus:outline-none"
             rows="3"
             cols="50"
             placeholder="What's happening?"
+            value={text}
+            onChange={onChange}
             style={{ resize: false, overflow: "auto" }}
           />
         </div>
@@ -54,7 +75,12 @@ const Home = () => {
             </div>
           </div>
           <div>
-            <button className="bg-blue-400 mt-5 hover:bg-opacity-90 text-white font-bold py-2 px-8 rounded-full mr-8 float-right">
+            <button
+              id="tweet-btn"
+              className="focus:outline-none bg-blue mt-5 hover:bg-opacity-90 text-white font-bold py-2 px-8 rounded-full mr-8 float-right"
+              onClick={postTweet}
+              disabled={!text}
+            >
               Tweet
             </button>
           </div>
