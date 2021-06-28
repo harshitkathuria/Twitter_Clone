@@ -1,22 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-
 import Tweet from "./Tweet";
-import { deleteRetweet } from "../../redux/actions/tweetAction";
-import { setAlert } from "../../redux/actions/alertAction";
 
 const Retweet = ({ data }) => {
   const retweetUser = data.userId,
     tweet = data.tweetId;
-
-  const user = useSelector(state => state.auth.user);
-  const dispatch = useDispatch();
-
-  const onDeleteRetweet = () => {
-    dispatch(deleteRetweet(data._id));
-    dispatch(setAlert("Your Retweet was deleted", "success"));
-  };
 
   return (
     <div className="flex flex-col pt-3">
@@ -41,16 +29,6 @@ const Retweet = ({ data }) => {
             </div>
           </Link>
         </div>
-        {retweetUser._id === user._id && (
-          <div
-            onClick={onDeleteRetweet}
-            id="delete"
-            className="text-red-600 cursor-pointer font-semibold"
-          >
-            Delete
-            {/* Delete <i className="fas fa-minus-circle"></i> */}
-          </div>
-        )}
       </div>
       <Tweet tweet={tweet} />
     </div>

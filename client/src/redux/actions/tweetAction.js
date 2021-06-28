@@ -1,10 +1,12 @@
 import axios from "axios";
 import {
+  CREATE_RETWEET,
   CREATE_TWEET,
   DELETE_RETWEET,
   DELETE_TWEET,
   FAIL,
   GET_LIKED_TWEETS_OF_USER,
+  GET_RETWEETS_OF_USER,
   HOME_FEED_SUCCESS,
   LIKE_TWEET,
   UNLIKE_TWEET
@@ -120,15 +122,57 @@ export const deleteTweet = id => {
   };
 };
 
+export const createRetweet = tweetId => {
+  return async dispatch => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      };
+      const res = await axios.post(`/api/tweets/retweet/${tweetId}`, config);
+      dispatch({
+        type: CREATE_RETWEET,
+        payload: res.data.data.retweet
+      });
+    } catch (err) {
+      console.log(err);
+      dispatch({
+        type: FAIL,
+        payload: err.response.data.msg
+      });
+    }
+  };
+};
+
+export const getRetweetsOfUser = id => {
+  return async dispatch => {
+    try {
+      const res = await axios.get(`/api/users/retweet/${id}`);
+      dispatch({
+        type: GET_RETWEETS_OF_USER,
+        payload: res.data.data.retweets
+      });
+    } catch (err) {
+      console.log(err);
+      dispatch({
+        type: FAIL,
+        payload: err.response.data.msg
+      });
+    }
+  };
+};
+
 export const deleteRetweet = id => {
   return async dispatch => {
     try {
-      await axios.delete(`/api/retweets/${id}`);
+      await axios.delete(`/api/tweets/retweet/${id}`);
       dispatch({
         type: DELETE_RETWEET,
         payload: id
       });
     } catch (err) {
+      console.log(err);
       dispatch({
         type: FAIL,
         payload: err.response.data.msg

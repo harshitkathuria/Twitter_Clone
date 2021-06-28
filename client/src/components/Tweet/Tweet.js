@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { setAlert } from "../../redux/actions/alertAction";
 
 import {
+  createRetweet,
+  deleteRetweet,
   deleteTweet,
   likeTweet,
   unlikeTweet
@@ -22,6 +24,7 @@ const Tweet = ({ tweet }) => {
 
   const user = useSelector(state => state.auth.user);
   const likes = useSelector(state => state.tweet.likes);
+  const retweets = useSelector(state => state.tweet.retweets);
 
   const dispatch = useDispatch();
 
@@ -32,10 +35,38 @@ const Tweet = ({ tweet }) => {
     dispatch(unlikeTweet(tweet));
   };
 
+  const onCreateRetweet = () => {
+    dispatch(createRetweet(tweetId));
+  };
+  const onDeleteRetweet = () => {
+    dispatch(deleteRetweet(tweetId));
+  };
+
   const onDeleteTweet = () => {
     dispatch(deleteTweet(tweetId));
     dispatch(setAlert("Your tweet was deleted", "success"));
   };
+
+  // Should Create Retweet or Delete Retweet
+  let inputProps = null;
+
+  const arr =
+    retweets && retweets.length > 0
+      ? retweets.filter(
+          retweet => retweet.tweetId && retweet.tweetId._id === tweetId
+        )
+      : [];
+  if (arr.length > 0) {
+    inputProps = {
+      stroke: "rgb(23, 191, 99)",
+      fill: "rgb(23, 191, 99)"
+    };
+  } else {
+    inputProps = {
+      stroke: "gray",
+      fill: ""
+    };
+  }
 
   return (
     <div className="border-b-2 border-gray-200 flex px-2 pt-3">
@@ -128,10 +159,11 @@ const Tweet = ({ tweet }) => {
             >
               <div className="max-w-12 group flex items-center text-gray-500 text-base leading-6 font-medium rounded-full">
                 <svg
+                  onClick={arr.length > 0 ? onDeleteRetweet : onCreateRetweet}
+                  {...inputProps}
                   className="text-center h-5 w-5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  stroke="gray"
                   viewBox="0 0 24 24"
                 >
                   <g>
@@ -149,7 +181,7 @@ const Tweet = ({ tweet }) => {
               className="flex text-center items-center cursor-pointer"
             >
               <div className="max-w-12 group flex items-center text-gray-500 text-base leading-6 font-medium rounded-full hover:text-blue-300">
-                {likes.filter(tweet => tweet._id == tweetId).length === 0 ? (
+                {likes.filter(tweet => tweet._id === tweetId).length === 0 ? (
                   <i
                     onClick={onLikeTweet}
                     id="like"
