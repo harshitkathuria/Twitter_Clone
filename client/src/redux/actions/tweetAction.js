@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  CREATE_COMMENT,
   CREATE_RETWEET,
   CREATE_TWEET,
   DELETE_RETWEET,
@@ -170,6 +171,51 @@ export const deleteRetweet = id => {
       dispatch({
         type: DELETE_RETWEET,
         payload: id
+      });
+    } catch (err) {
+      console.log(err);
+      dispatch({
+        type: FAIL,
+        payload: err.response.data.msg
+      });
+    }
+  };
+};
+
+export const createComment = (tweetId, text) => {
+  return async dispatch => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      };
+      const res = await axios.post(
+        `/api/tweets/comment/${tweetId}`,
+        { text },
+        config
+      );
+      dispatch({
+        type: CREATE_COMMENT,
+        payload: res.data.data
+      });
+    } catch (err) {
+      console.log(err);
+      dispatch({
+        type: FAIL,
+        payload: err.response.data.msg
+      });
+    }
+  };
+};
+
+export const getCommentsOfUser = id => {
+  return async dispatch => {
+    try {
+      const res = await axios.get(`/api/users/comments/${id}`);
+      dispatch({
+        type: CREATE_COMMENT,
+        payload: res.data.data
       });
     } catch (err) {
       console.log(err);
