@@ -51,10 +51,11 @@ exports.createRetweet = async (req, res) => {
         msg: "You have already retweeted this tweet"
       });
 
-    const retweet = await Retweet.create({
+    let retweet = await Retweet.create({
       userId,
       tweetId
     });
+
     // Increment retweetsCount of the tweet by 1
     const tweet = await Tweet.findByIdAndUpdate(
       tweetId,
@@ -63,6 +64,17 @@ exports.createRetweet = async (req, res) => {
       },
       { new: true }
     );
+
+    retweet = await retweet
+      .populate({
+        path: "tweetId",
+        populate: {
+          path: "userId",
+          select: "name username"
+        }
+      })
+      .populate("userId", "name username")
+      .execPopulate();
 
     res.status(201).json({
       status: "success",
@@ -84,7 +96,16 @@ exports.createRetweet = async (req, res) => {
 exports.getRetweetsOfUser = async (req, res) => {
   try {
     const userId = req.params.id;
-    const retweets = await Retweet.find({ userId });
+    const retweets = await Retweet.find({ userId })
+      .populate({
+        path: "tweetId",
+        populate: {
+          path: "userId",
+          select: "name username"
+        }
+      })
+      .populate("userId", "name username")
+      .sort("-createdAt");
     res.status(200).json({
       status: "success",
       data: {
