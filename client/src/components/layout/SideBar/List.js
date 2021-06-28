@@ -1,7 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const List = () => {
+  const user = useSelector(state => state.auth.user);
+
   return (
     <ul className="my-1.5">
       <li id="home">
@@ -122,7 +125,7 @@ const List = () => {
       </li>
       <li id="profile">
         <Link
-          to="/profile"
+          to={`/profile/${user._id}`}
           className="mt-1 group flex items-center px-2 py-3 text-xl leading-8 font-bold rounded-full hover:bg-blue hover:bg-opacity-10 hover:text-blue"
         >
           <svg

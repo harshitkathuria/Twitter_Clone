@@ -41,7 +41,6 @@ const ResetPassword = () => {
           <span className="text-gray-500 text-lg">Password Reset</span>
         </Link>
       </nav>
-      <Alert />
       <section id="before-reset" className="mx-auto max-w-xl my-4">
         <div className="py-9">
           <div className="heading__wrapper mb-9">

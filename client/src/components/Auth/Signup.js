@@ -57,7 +57,6 @@ const Signup = props => {
     <div className="relative">
       <div className=""></div>
       <div className="antialiased bg-gray-500 bg-opacity-60 text-gray-900 font-sans overflow-x-hidden w-full">
-        <Alert />
         <div className="relative px-4 min-h-screen md:flex md:items-center md:justify-center">
           <div className="bg-white rounded-lg md:max-w-lg w-3/5 md:mx-auto p-4 fixed inset-x-0 bottom-0 z-50 mb-4 mx-4 md:relative">
             <div className="md:flex flex-col justify-between items-center w-full">

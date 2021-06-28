@@ -1,4 +1,5 @@
 import {
+  CREATE_COMMENT,
   CREATE_RETWEET,
   CREATE_TWEET,
   DELETE_RETWEET,
@@ -73,7 +74,8 @@ const tweetReducer = (state = initialState, action) => {
             )
           : null,
         tweetsAndRetweets: state.tweetsAndRetweets
-          ? state.tweetsAndRetweets.filter(tweetOrRetweet =>
+          ? console.log(state.tweetsAndRetweets) &&
+            state.tweetsAndRetweets.filter(tweetOrRetweet =>
               tweetOrRetweet.tweetId
                 ? tweetOrRetweet.tweetId._id !== action.payload
                 : tweetOrRetweet._id !== action.payload
@@ -165,6 +167,30 @@ const tweetReducer = (state = initialState, action) => {
                 }
               : tweet
           )
+      };
+    case CREATE_COMMENT:
+      return {
+        ...state,
+        homeFeed: state.homeFeed
+          ? [action.payload.comment, ...state.homeFeed].map(tweet =>
+              tweet._id === action.payload.tweet._id
+                ? {
+                    ...tweet,
+                    commentsCount: tweet.commentsCount + 1
+                  }
+                : tweet
+            )
+          : null,
+        tweetsAndRetweets: state.tweetsAndRetweets
+          ? [action.payload.comment, ...state.tweetsAndRetweets].map(tweet =>
+              tweet._id === action.payload.tweet._id
+                ? {
+                    ...tweet,
+                    commentsCount: tweet.commentsCount + 1
+                  }
+                : tweet
+            )
+          : null
       };
     case GET_RETWEETS_OF_USER:
       return {
