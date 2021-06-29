@@ -1,28 +1,70 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import Modal from "react-modal";
+import Logo from "../../layout/Logo";
 
 import {
   getFollowers,
   getFollowings,
   getUser
 } from "../../../redux/actions/userAction";
+import { updateMe } from "../../../redux/actions/authAction";
 import TweetsList from "./TweetsList";
 import Spinner from "../../layout/Spinner";
 
 const Profile = ({ id }) => {
-  const user = useSelector(state => state.user.user);
-  const followersData = useSelector(state => state.user.followers);
-  const followingsData = useSelector(state => state.user.followings);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (user) document.title = user.username;
+    if (user) {
+      document.title = user.username;
+      console.log("Hello");
+    }
 
     dispatch(getUser(id));
     dispatch(getFollowers(id));
     dispatch(getFollowings(id));
   }, [id]);
+
+  const loggedInUser = useSelector(state => state.auth.user);
+  const user = useSelector(state => state.user.user);
+  const followersData = useSelector(state => state.user.followers);
+  const followingsData = useSelector(state => state.user.followings);
+
+  Modal.setAppElement(document.getElementById("root"));
+
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [userProfile, setUserProfile] = useState({
+    name: loggedInUser.name,
+    bio: loggedInUser.bio ? loggedInUser.bio : "",
+    website: loggedInUser.website ? loggedInUser.website : "",
+    location: loggedInUser.location ? loggedInUser.location : ""
+  });
+
+  const modalStyle = {
+    overlay: {
+      backgroundColor: "rgb(0, 0, 0, 0.7)",
+      zIndex: 100
+    },
+    content: {
+      zIndex: 1000,
+      height: "fit-content",
+      width: "30%",
+      marginLeft: "auto",
+      marginRight: "auto",
+      borderRadius: "15px"
+    }
+  };
+
+  const onUpdateUser = () => {
+    dispatch(updateMe(userProfile));
+    setModalIsOpen(false);
+  };
+
+  const onChange = e => {
+    setUserProfile({ ...userProfile, [e.target.name]: e.target.value });
+  };
 
   return user && followersData && followingsData ? (
     <section
@@ -88,9 +130,116 @@ const Profile = ({ id }) => {
               </div>
             </div>
             <div className="flex flex-col text-right">
-              <button className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring   max-w-max border bg-transparent border-blue text-blue hover:bg-blue hover:bg-opacity-10 items-center font-bold py-2 px-4 rounded-full mr-0 ml-auto">
-                Edit Profile
-              </button>
+              {user._id === loggedInUser._id && (
+                <button
+                  onClick={() => setModalIsOpen(true)}
+                  className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring   max-w-max border bg-transparent border-blue text-blue hover:bg-blue hover:bg-opacity-10 items-center font-bold py-2 px-4 rounded-full mr-0 ml-auto"
+                >
+                  Edit Profile
+                  <Modal
+                    preventScroll={true}
+                    isOpen={modalIsOpen}
+                    onRequestClose={() => setModalIsOpen(false)}
+                    style={modalStyle}
+                  >
+                    <div className="md:flex flex-col justify-between items-center w-full">
+                      <div className="logo-wrapper flex justify-center">
+                        <Logo classes={"w-8 h-8 text-blue"} />
+                      </div>
+                      <div className="mt-4 text-left w-full">
+                        <p className="text-2xl font-bold">
+                          Update Your Profile
+                        </p>
+                        <div className="form-wrapper">
+                          <form className="mt-6" onSubmit={onUpdateUser}>
+                            <div className="flex flex-col align-start gap-3 mb-4">
+                              <div>
+                                <label
+                                  htmlFor="firstname"
+                                  className="block text-xs font-semibold text-gray-600 uppercase"
+                                >
+                                  Name
+                                </label>
+                                <input
+                                  id="name"
+                                  type="text"
+                                  name="name"
+                                  placeholder="Name"
+                                  className="border-2 block w-full p-3 mt-2 bg-gray-200 appearance-none focus:outline-none focus:shadow-inner focus:border-blue rounded"
+                                  onChange={onChange}
+                                  value={userProfile.name}
+                                  required
+                                />
+                              </div>
+                              <div>
+                                <label
+                                  htmlFor="nio"
+                                  className="block text-xs font-semibold text-gray-600 uppercase"
+                                >
+                                  Bio
+                                </label>
+                                <input
+                                  id="bio"
+                                  type="text"
+                                  name="bio"
+                                  placeholder="Bio"
+                                  className="border-2 block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:shadow-inner focus:border-blue rounded"
+                                  onChange={onChange}
+                                  value={userProfile.bio}
+                                />
+                              </div>
+                              <div>
+                                <label
+                                  htmlFor="location"
+                                  className="block text-xs font-semibold text-gray-600 uppercase"
+                                >
+                                  Location
+                                </label>
+                                <input
+                                  id="location"
+                                  type="text"
+                                  name="location"
+                                  placeholder="Location"
+                                  className="border-2 block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none  focus:shadow-inner focus:border-blue rounded"
+                                  onChange={onChange}
+                                  value={userProfile.location}
+                                />
+                              </div>
+                              <div>
+                                <label
+                                  htmlFor="website"
+                                  className="block mt-2 text-xs font-semibold text-gray-600 uppercase"
+                                >
+                                  Website
+                                </label>
+                                <input
+                                  id="wesbite"
+                                  type="text"
+                                  name="website"
+                                  placeholder="Website"
+                                  className="border-2 block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none  focus:shadow-inner focus:border-blue rounded"
+                                  onChange={onChange}
+                                  value={userProfile.website}
+                                />
+                              </div>
+
+                              <div className="text-center mt-6">
+                                <input
+                                  type="submit"
+                                  name="login"
+                                  id="login"
+                                  value="Save"
+                                  className="cursor-pointer bg-blue text-white hover:bg-blue hover:bg-opacity-90 font-bold py-2 px-4 rounded-full w-full max focus:outline-none focus:bg-opacity-90"
+                                />
+                              </div>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+                  </Modal>
+                </button>
+              )}
             </div>
           </div>
 
@@ -123,7 +272,7 @@ const Profile = ({ id }) => {
                         <path d="M20.692 10.69C20.692 5.9 16.792 2 12 2s-8.692 3.9-8.692 8.69c0 1.902.603 3.708 1.743 5.223l.003-.002.007.015c1.628 2.07 6.278 5.757 6.475 5.912.138.11.302.163.465.163.163 0 .327-.053.465-.162.197-.155 4.847-3.84 6.475-5.912l.007-.014.002.002c1.14-1.516 1.742-3.32 1.742-5.223zM12 20.29c-1.224-.99-4.52-3.715-5.756-5.285-.94-1.25-1.436-2.742-1.436-4.312C4.808 6.727 8.035 3.5 12 3.5s7.192 3.226 7.192 7.19c0 1.57-.497 3.062-1.436 4.313-1.236 1.57-4.532 4.294-5.756 5.285z"></path>
                       </g>
                     </svg>{" "}
-                    <span className="leading-5 ml-1">My Location</span>
+                    <span className="leading-5 ml-1">{user.location}</span>
                   </span>
                 )}
                 {/* Website */}
@@ -142,8 +291,12 @@ const Profile = ({ id }) => {
                         <path d="M7.27 22.054c-1.61 0-3.197-.735-4.225-2.125-.832-1.127-1.176-2.51-.968-3.894s.943-2.605 2.07-3.438l1.478-1.094c.334-.245.805-.175 1.05.158s.177.804-.157 1.05l-1.48 1.095c-.803.593-1.326 1.464-1.475 2.45-.148.99.097 1.975.69 2.778 1.225 1.657 3.57 2.01 5.23.785l3.528-2.608c1.658-1.225 2.01-3.57.785-5.23-.498-.674-1.187-1.15-1.992-1.376-.4-.113-.633-.527-.52-.927.112-.4.528-.63.926-.522 1.13.318 2.096.986 2.794 1.932 1.717 2.324 1.224 5.612-1.1 7.33l-3.53 2.608c-.933.693-2.023 1.026-3.105 1.026z"></path>
                       </g>
                     </svg>{" "}
-                    <Link to="/" className="text-blue">
-                      My Website
+                    <Link
+                      to={"/user.website"}
+                      target="_blank"
+                      className="text-blue"
+                    >
+                      {user.website}
                     </Link>
                   </span>
                 )}
@@ -180,21 +333,18 @@ const Profile = ({ id }) => {
               </div>
             </div>
             <div className="pt-3 flex justify-start items-start w-full">
-              <Link
-                to="/following"
-                className="text-center pr-3 hover:underline"
-              >
+              <div className="text-center pr-3 cursor-pointer">
                 <span className="font-bold ">
                   {followingsData && followingsData.length}
                 </span>
                 <span className="text-gray-500"> Following</span>
-              </Link>
-              <Link to="/follower" className="text-center px-3 hover:underline">
+              </div>
+              <div className="text-center px-3 cursor-pointer">
                 <span className="font-bold ">
                   {followersData && followersData.length}
                 </span>
                 <span className="text-gray-500"> Followers</span>
-              </Link>
+              </div>
             </div>
           </div>
         </div>

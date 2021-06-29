@@ -1,7 +1,8 @@
 import {
   GET_FOLLOWERS_SUCCESS,
   GET_FOLLOWINGS_SUCCESS,
-  GET_USER
+  GET_USER,
+  UPDATE_USER
 } from "../actions/types";
 
 const initialState = {
@@ -16,6 +17,13 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         user: action.payload
+      };
+
+    case UPDATE_USER:
+      return {
+        ...state,
+        user: action.payload,
+        loading: false
       };
     case GET_FOLLOWERS_SUCCESS:
       return {

@@ -8,7 +8,9 @@ import {
   RESET_PASSWORD_FAIL,
   CLEAR_ERROR,
   USER_LOADED,
-  LOGOUT_USER
+  LOGOUT_USER,
+  UPDATE_USER,
+  FAIL
 } from "./types";
 
 import setAuthToken from "../../components/utils/setAuthToken";
@@ -55,6 +57,29 @@ export const login = user => {
       console.log(err.response.data.msg);
       dispatch({
         type: AUTH_FAIL,
+        payload: err.response.data.msg
+      });
+    }
+  };
+};
+
+export const updateMe = data => {
+  return async dispatch => {
+    try {
+      const config = {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      };
+      const res = await axios.patch("/api/users/updateMe", data, config);
+      dispatch({
+        type: UPDATE_USER,
+        payload: res.data.data.user
+      });
+    } catch (err) {
+      console.log(err);
+      dispatch({
+        type: FAIL,
         payload: err.response.data.msg
       });
     }

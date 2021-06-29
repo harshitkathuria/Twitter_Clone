@@ -7,7 +7,8 @@ import {
   CLEAR_ERROR,
   USER_LOADED,
   FAIL,
-  LOGOUT_USER
+  LOGOUT_USER,
+  UPDATE_USER
 } from "../actions/types";
 
 const initialState = {
@@ -34,6 +35,13 @@ const authReducer = (state = initialState, action) => {
         ...state,
         user: action.payload.data.user,
         isAuthenticated: true,
+        loading: false
+      };
+
+    case UPDATE_USER:
+      return {
+        ...state,
+        user: action.payload,
         loading: false
       };
 
