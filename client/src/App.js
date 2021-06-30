@@ -18,6 +18,7 @@ import Profile from "./components/Pages/Profile/Profile";
 import PrivateRoute from "./components/utils/PrivateRoute";
 import NonLoggedRoute from "./components/utils/NonLoggedRoute";
 import setAuthToken from "./components/utils/setAuthToken";
+import Messenger from "./components/Pages/Messenger/Messenger";
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
@@ -45,6 +46,11 @@ function App() {
               path="/profile/:id"
               component={Overview}
               page={Profile}
+            />
+            <PrivateRoute
+              path="/messages"
+              component={Overview}
+              page={Messenger}
             />
           </Switch>
         </Router>
