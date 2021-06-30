@@ -1,4 +1,5 @@
 const Connection = require("../models/Connection");
+const Conversation = require("../models/Conversation");
 
 exports.follow = async (req, res) => {
   try {
@@ -14,6 +15,16 @@ exports.follow = async (req, res) => {
       followed,
       following
     });
+
+    if (
+      !(await Conversation.exists({
+        members: { $all: [String(req.user._id), req.params.id] }
+      }))
+    )
+      await Conversation.create({
+        members: [String(req.user._id), req.params.id]
+      });
+
     res.status(200).json({
       status: "success",
       data: {
@@ -81,9 +92,14 @@ exports.getFollowers = async (req, res) => {
 // Get Followings of an User
 exports.getFollowing = async (req, res) => {
   try {
-    const followings = (
-      await Connection.find({ following: req.params.id }).populate("followed")
-    ).map(data => data.followed);
+    let followings = await Connection.find({
+      following: req.params.id
+    }).populate("followed");
+
+    if (!req.params.isConv) {
+      console.log("not conversations");
+      followings = followings.map(data => data.followed);
+    }
     res.status(200).json({
       status: "success",
       data: {
