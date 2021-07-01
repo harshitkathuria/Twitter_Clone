@@ -94,10 +94,10 @@ export default function Messenger() {
     <>
       <div
         className="max-w-full w-screen messenger h-screen"
-        style={{ marginLeft: "calc(20% + 8rem - 4px)" }}
+        style={{ marginLeft: "calc(20% + 8rem)" }}
       >
         <div className="chatMenu border-r-2 border-gray-300">
-          <div className="chatMenuWrapper">
+          <div className="chatMenuWrapper px-0">
             <div className="flex items-center justify-center border-b-2 border-gray-300">
               <div className="text-2xl mt-3 font-semibold ml-1 mb-3">
                 Messages
@@ -132,7 +132,7 @@ export default function Messenger() {
                 </div>
                 <div className="chatBoxBottom">
                   <textarea
-                    className="focus:outline-none border-2 border-gray-400 rounded-lg chatMessageInput"
+                    className="focus:outline-none border-2 border-gray-400 rounded-lg chatMessageInput dark:bg-black-dark"
                     placeholder="Write something..."
                     onChange={e => setNewMessage(e.target.value)}
                     value={newMessage}

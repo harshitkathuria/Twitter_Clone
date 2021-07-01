@@ -18,7 +18,7 @@ export default function Conversation({ conversation, currentUser }) {
     getUser();
   }, [currentUser, conversation]);
   return (
-    <div className="conversation">
+    <div className="conversation dark:hover:bg-gray-900">
       <span className="conversationName font-bold">{user?.name}</span>
     </div>
   );

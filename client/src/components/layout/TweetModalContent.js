@@ -19,9 +19,11 @@ const TweetModalContent = ({ header, classes, closeModal, tweetId }) => {
   };
   return (
     <>
-      <div className={`flex border-b-2 border-gray-200 ${classes}`}>
+      <div
+        className={`flex border-b-2 border-gray-200 dark:border-gray-500 ${classes}`}
+      >
         <div className="flex-1 m-2">
-          <h2 className="px-4 py-2 text-xl font-bold text-black">
+          <h2 className="px-4 py-2 text-xl font-bold text-black dark:text-gray-primary">
             {!header ? "Home" : header}
           </h2>
         </div>
@@ -37,7 +39,7 @@ const TweetModalContent = ({ header, classes, closeModal, tweetId }) => {
         <div className="flex-1 px-2 pt-2 mt-2">
           <textarea
             id="tweet-text"
-            className=" bg-transparent text-black font-normal text-xl w-full focus:outline-none"
+            className=" bg-transparent text-black dark:text-gray-primary font-normal text-xl w-full focus:outline-none"
             rows="3"
             cols="50"
             placeholder="What's happening?"
@@ -47,7 +49,7 @@ const TweetModalContent = ({ header, classes, closeModal, tweetId }) => {
           />
         </div>
       </div>
-      <div className="flex justify-end border-b-2 border-gray-200">
+      <div className="flex justify-end border-b-2 border-gray-200 dark:border-gray-500">
         <div className="flex w-64 px-2 justify-end">
           <div>
             <div className="flex text-center px-1 py-1 m-2">

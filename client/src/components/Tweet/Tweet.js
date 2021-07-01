@@ -38,12 +38,8 @@ const Tweet = ({ tweet }) => {
     setTweetText(e.target.value);
   };
 
-  const onCloseModal = () => {
-    setModalIsOpen(false);
-  };
-
   const postComment = () => {
-    onCloseModal();
+    setModalIsOpen(false);
     dispatch(createComment(tweetId, tweetText));
     setTweetText("");
     dispatch(setAlert("Your tweet was sent", "info"));
@@ -107,7 +103,7 @@ const Tweet = ({ tweet }) => {
   Modal.setAppElement(document.getElementById("root"));
 
   return (
-    <div className="border-b-2 border-gray-200 flex px-2 pt-3">
+    <div className="border-b-2 border-gray-200 dark:border-gray-500 flex px-2 pt-3">
       <div className="flex flex-col flex-grow-0 flex-shrink-0 items-center mr-3">
         <div id="img-wrapper" className="flex flex-grow-0 w-full">
           <Link
@@ -115,7 +111,7 @@ const Tweet = ({ tweet }) => {
             className="flex items-center justify-center w-full"
           >
             <img
-              src="https://source.unsplash.com/random"
+              src="../../assets/defaultProfile.jpg"
               alt="User Profile"
               className="w-12 h-12 rounded-full"
             />
@@ -128,7 +124,7 @@ const Tweet = ({ tweet }) => {
             <div id="user-name">
               <Link to={`/profile/${_id}`}>
                 <p>
-                  <span className="text-base leading-6 font-bold font text-black">
+                  <span className="text-base leading-6 font-bold font text-black dark:text-gray-primary">
                     {name}
                   </span>
                   <span className="ml-1 text-gray-500">{`@${username}`}</span>
@@ -183,12 +179,14 @@ const Tweet = ({ tweet }) => {
                   onRequestClose={() => setModalIsOpen(false)}
                   style={modalStyle}
                 >
-                  <div className={`flex border-b-2 border-gray-200 -m-1`}>
+                  <div
+                    className={`flex border-b-2 border-gray-200 dark:border-gray-500 -m-1`}
+                  >
                     <div className="flex-1 m-2">
                       <h2 className="px-4 py-2 text-xl font-bold text-black">
                         <i
                           className="fas fa-times test blue"
-                          onClick={onCloseModal}
+                          onClick={() => setModalIsOpen(false)}
                         ></i>
                       </h2>
                     </div>
@@ -214,7 +212,7 @@ const Tweet = ({ tweet }) => {
                       />
                     </div>
                   </div>
-                  <div className="flex justify-end border-b-2 border-gray-200">
+                  <div className="flex justify-end border-b-2 border-gray-200 dark:border-gray-500">
                     <div className="flex w-64 px-2 justify-end">
                       <div>
                         <div className="flex text-center px-1 py-1 m-2">

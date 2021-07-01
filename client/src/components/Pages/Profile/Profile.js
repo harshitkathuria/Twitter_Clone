@@ -33,6 +33,7 @@ const Profile = ({ id }) => {
   const followers = useSelector(state => state.user.followers);
   const followings = useSelector(state => state.user.followings);
   const loggedInUserFollowings = useSelector(state => state.auth.myFollowings);
+  const userLoading = useSelector(state => state.user.loading);
 
   useEffect(() => {
     dispatch(getMyFollowings(loggedInUser._id));
@@ -59,7 +60,13 @@ const Profile = ({ id }) => {
       width: "30%",
       marginLeft: "auto",
       marginRight: "auto",
-      borderRadius: "15px"
+      borderRadius: "15px",
+      backgroundColor: document.querySelector("html").classList.contains("dark")
+        ? "#000"
+        : "#fff",
+      borderColor: document.querySelector("html").classList.contains("dark")
+        ? "rgb(41, 41, 41)"
+        : "#fff"
     }
   };
 
@@ -80,10 +87,14 @@ const Profile = ({ id }) => {
     setUserProfile({ ...userProfile, [e.target.name]: e.target.value });
   };
 
-  return user && followers && followings && loggedInUserFollowings ? (
+  return user &&
+    followers &&
+    followings &&
+    loggedInUserFollowings &&
+    !userLoading ? (
     <section
-      className="w-2/5 border-r-2 border-gray-200"
-      style={{ marginLeft: "calc(20% + 8rem)" }}
+      className="border-r-2 border-gray-200 dark:border-gray-500"
+      style={{ marginLeft: "calc(20% + 8rem - 4px)" }}
     >
       <div>
         <div className="flex justify-start">
@@ -104,7 +115,9 @@ const Profile = ({ id }) => {
             </Link>
           </div>
           <div className="mx-2 flex items-center justify-center">
-            <h2 className="mb-0 text-xl font-bold text-black">{user.name}</h2>
+            <h2 className="mb-0 text-xl font-bold text-black dark:text-gray-primary">
+              {user.name}
+            </h2>
           </div>
         </div>
 
@@ -147,7 +160,7 @@ const Profile = ({ id }) => {
               {user._id === loggedInUser._id ? (
                 <button
                   onClick={() => setModalIsOpen(true)}
-                  className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring   max-w-max border bg-transparent border-blue text-blue hover:bg-blue hover:bg-opacity-10 items-center font-bold py-2 px-4 rounded-full mr-0 ml-auto"
+                  className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none max-w-max border bg-transparent border-blue text-blue hover:bg-blue hover:bg-opacity-10 items-center font-bold py-2 px-4 rounded-full mr-0 ml-auto"
                 >
                   Edit Profile
                   <Modal
@@ -158,7 +171,7 @@ const Profile = ({ id }) => {
                   >
                     <div className="md:flex flex-col justify-between items-center w-full">
                       <div className="logo-wrapper flex justify-center">
-                        <Logo classes={"w-8 h-8 text-blue"} />
+                        <Logo classes={"w-8 h-8 text-blue dark:text-white"} />
                       </div>
                       <div className="mt-4 text-left w-full">
                         <p className="text-2xl font-bold">
@@ -179,7 +192,7 @@ const Profile = ({ id }) => {
                                   type="text"
                                   name="name"
                                   placeholder="Name"
-                                  className="border-2 block w-full p-3 mt-2 bg-gray-200 appearance-none focus:outline-none focus:shadow-inner focus:border-blue rounded"
+                                  className="border-2 block w-full p-3 mt-2 bg-gray-200 dark:bg-black-dark appearance-none focus:outline-none focus:shadow-inner focus:border-blue dark:text-gray-primary rounded"
                                   onChange={onChange}
                                   value={userProfile.name}
                                   required
@@ -197,7 +210,7 @@ const Profile = ({ id }) => {
                                   type="text"
                                   name="bio"
                                   placeholder="Bio"
-                                  className="border-2 block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none focus:shadow-inner focus:border-blue rounded"
+                                  className="border-2 block w-full p-3 mt-2 text-gray-700 bg-gray-200 dark:bg-black-dark appearance-none focus:outline-none focus:shadow-inner focus:border-blue dark:text-gray-primary rounded"
                                   onChange={onChange}
                                   value={userProfile.bio}
                                 />
@@ -214,7 +227,7 @@ const Profile = ({ id }) => {
                                   type="text"
                                   name="location"
                                   placeholder="Location"
-                                  className="border-2 block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none  focus:shadow-inner focus:border-blue rounded"
+                                  className="border-2 block w-full p-3 mt-2 text-gray-700 bg-gray-200 dark:bg-black-dark appearance-none focus:outline-none focus:shadow-inner focus:border-blue dark:text-gray-primary rounded"
                                   onChange={onChange}
                                   value={userProfile.location}
                                 />
@@ -231,7 +244,7 @@ const Profile = ({ id }) => {
                                   type="text"
                                   name="website"
                                   placeholder="Website"
-                                  className="border-2 block w-full p-3 mt-2 text-gray-700 bg-gray-200 appearance-none focus:outline-none  focus:shadow-inner focus:border-blue rounded"
+                                  className="border-2 block w-full p-3 mt-2 text-gray-700 bg-gray-200 dark:bg-black-dark appearance-none focus:outline-none focus:shadow-inner focus:border-blue rounded dark:text-gray-primary dark:placeholder-gray-primary"
                                   onChange={onChange}
                                   value={userProfile.website}
                                 />
@@ -273,7 +286,7 @@ const Profile = ({ id }) => {
 
           <div className="space-y-1 justify-center w-full mt-3 ml-3">
             <div className="flex flex-col items-start mb-3.5">
-              <h2 className="text-xl leading-6 font-bold text-black">
+              <h2 className="text-xl leading-6 font-bold text-black dark:text-gray-primary">
                 {user.name}
               </h2>
               <p className="text-sm leading-5 font-medium text-gray-600">
@@ -281,7 +294,9 @@ const Profile = ({ id }) => {
               </p>
             </div>
             <div className="mt-3">
-              <p className="text-black leading-tight mb-2">{user.bio}</p>
+              <p className="text-black dark:text-white leading-tight mb-2">
+                {user.bio}
+              </p>
               <div className="text-gray-600 flex items-center gap-3">
                 {/* Location */}
                 {user.location && (

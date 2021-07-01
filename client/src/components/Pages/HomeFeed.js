@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  getCommentsOfUser,
   getLikedTweetsOfUser,
   getRetweetsOfUser,
   loadHomeFeed
@@ -21,7 +20,6 @@ const HomeFeed = () => {
     dispatch(loadHomeFeed());
     dispatch(getLikedTweetsOfUser(user._id));
     dispatch(getRetweetsOfUser(user._id));
-    dispatch(getCommentsOfUser(user._id));
   }, []);
 
   return (

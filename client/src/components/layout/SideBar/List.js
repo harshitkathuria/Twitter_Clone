@@ -5,6 +5,15 @@ import { useSelector } from "react-redux";
 const List = () => {
   const user = useSelector(state => state.auth.user);
 
+  const onThemeChange = e => {
+    const htmlClasses = document.querySelector("html").classList;
+    if (e.target.checked) {
+      htmlClasses.add("dark");
+    } else {
+      htmlClasses.remove("dark");
+    }
+  };
+
   return (
     <ul className="my-1.5">
       <li id="home">
@@ -104,25 +113,6 @@ const List = () => {
           Bookmarks
         </Link>
       </li>
-      <li id="lists">
-        <Link
-          to="/lists"
-          className="mt-1 group flex items-center px-2 py-3 text-xl leading-8  font-bold rounded-full hover:bg-blue hover:bg-opacity-10 hover:text-blue"
-        >
-          <svg
-            className="mr-4 h-6 w-6"
-            fill="none"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth="2"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path>
-          </svg>
-          Lists
-        </Link>
-      </li>
       <li id="profile">
         <Link
           to={`/profile/${user._id}`}
@@ -142,6 +132,29 @@ const List = () => {
           Profile
         </Link>
       </li>
+      <div className="mt-1 group flex items-center px-2 py-3 text-xl leading-8 font-bold rounded-full">
+        <div className="flex justify-between">
+          <div className="flex items-center justify-center w-full">
+            <label>
+              <input
+                id="toggle"
+                class="toggle-checkbox"
+                type="checkbox"
+                onChange={onThemeChange}
+              />
+              <div class="toggle-slot">
+                <div class="sun-icon-wrapper">
+                  <i className="far fa-sun"></i>
+                </div>
+                <div class="toggle-button"></div>
+                <div class="moon-icon-wrapper">
+                  <i className="far fa-moon"></i>
+                </div>
+              </div>
+            </label>
+          </div>
+        </div>
+      </div>
     </ul>
   );
 };
