@@ -208,21 +208,3 @@ export const createComment = (tweetId, text) => {
     }
   };
 };
-
-export const getCommentsOfUser = id => {
-  return async dispatch => {
-    try {
-      const res = await axios.get(`/api/users/comments/${id}`);
-      dispatch({
-        type: CREATE_COMMENT,
-        payload: res.data.data
-      });
-    } catch (err) {
-      console.log(err);
-      dispatch({
-        type: FAIL,
-        payload: err.response.data.msg
-      });
-    }
-  };
-};

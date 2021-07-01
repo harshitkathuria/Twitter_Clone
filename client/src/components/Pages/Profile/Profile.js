@@ -5,11 +5,13 @@ import Modal from "react-modal";
 import Logo from "../../layout/Logo";
 
 import {
+  followUser,
   getFollowers,
   getFollowings,
-  getUser
+  getUser,
+  unfollowUser
 } from "../../../redux/actions/userAction";
-import { updateMe } from "../../../redux/actions/authAction";
+import { getMyFollowings, updateMe } from "../../../redux/actions/authAction";
 import TweetsList from "./TweetsList";
 import Spinner from "../../layout/Spinner";
 
@@ -19,7 +21,6 @@ const Profile = ({ id }) => {
   useEffect(() => {
     if (user) {
       document.title = user.username;
-      console.log("Hello");
     }
 
     dispatch(getUser(id));
@@ -29,8 +30,13 @@ const Profile = ({ id }) => {
 
   const loggedInUser = useSelector(state => state.auth.user);
   const user = useSelector(state => state.user.user);
-  const followersData = useSelector(state => state.user.followers);
-  const followingsData = useSelector(state => state.user.followings);
+  const followers = useSelector(state => state.user.followers);
+  const followings = useSelector(state => state.user.followings);
+  const loggedInUserFollowings = useSelector(state => state.auth.myFollowings);
+
+  useEffect(() => {
+    dispatch(getMyFollowings(loggedInUser._id));
+  }, []);
 
   Modal.setAppElement(document.getElementById("root"));
 
@@ -62,21 +68,29 @@ const Profile = ({ id }) => {
     setModalIsOpen(false);
   };
 
+  const onFollowUser = () => {
+    dispatch(followUser(user, loggedInUser));
+  };
+
+  const onUnFollowUser = () => {
+    dispatch(unfollowUser(user, loggedInUser));
+  };
+
   const onChange = e => {
     setUserProfile({ ...userProfile, [e.target.name]: e.target.value });
   };
 
-  return user && followersData && followingsData ? (
+  return user && followers && followings && loggedInUserFollowings ? (
     <section
       className="w-2/5 border-r-2 border-gray-200"
-      style={{ marginLeft: "calc(20% + 8rem - 4px)" }}
+      style={{ marginLeft: "calc(20% + 8rem)" }}
     >
       <div>
         <div className="flex justify-start">
           <div className="px-4 py-2 mx-2">
             <Link
               to=""
-              className=" text-2xl font-medium rounded-full text-blue-400 hover:bg-gray-800 hover:text-blue-300 float-right"
+              className=" text-2xl font-medium rounded-full text-blue float-right"
             >
               <svg
                 className="m-2 h-6 w-6"
@@ -130,7 +144,7 @@ const Profile = ({ id }) => {
               </div>
             </div>
             <div className="flex flex-col text-right">
-              {user._id === loggedInUser._id && (
+              {user._id === loggedInUser._id ? (
                 <button
                   onClick={() => setModalIsOpen(true)}
                   className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring   max-w-max border bg-transparent border-blue text-blue hover:bg-blue hover:bg-opacity-10 items-center font-bold py-2 px-4 rounded-full mr-0 ml-auto"
@@ -239,6 +253,20 @@ const Profile = ({ id }) => {
                     </div>
                   </Modal>
                 </button>
+              ) : loggedInUserFollowings.some(obj => obj._id === user._id) ? (
+                <button
+                  onClick={onUnFollowUser}
+                  className="flex justify-center max-h-max whitespace-nowrap focus:outline-none max-w-max border bg-red-700 text-white hover:bg-red hover:bg-opacity-90 items-center font-bold py-2 px-4 rounded-full mr-0 ml-auto"
+                >
+                  Unfollow
+                </button>
+              ) : (
+                <button
+                  onClick={onFollowUser}
+                  className="flex justify-center max-h-max whitespace-nowrap focus:outline-none max-w-max border bg-transparent border-blue text-blue hover:bg-blue hover:bg-opacity-10 items-center font-bold py-2 px-4 rounded-full mr-0 ml-auto"
+                >
+                  Follow
+                </button>
               )}
             </div>
           </div>
@@ -334,15 +362,11 @@ const Profile = ({ id }) => {
             </div>
             <div className="pt-3 flex justify-start items-start w-full">
               <div className="text-center pr-3 cursor-pointer">
-                <span className="font-bold ">
-                  {followingsData && followingsData.length}
-                </span>
+                <span className="font-bold ">{followings.length}</span>
                 <span className="text-gray-500"> Following</span>
               </div>
               <div className="text-center px-3 cursor-pointer">
-                <span className="font-bold ">
-                  {followersData && followersData.length}
-                </span>
+                <span className="font-bold ">{followers.length}</span>
                 <span className="text-gray-500"> Followers</span>
               </div>
             </div>

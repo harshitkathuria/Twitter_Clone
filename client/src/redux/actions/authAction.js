@@ -10,7 +10,8 @@ import {
   USER_LOADED,
   LOGOUT_USER,
   UPDATE_USER,
-  FAIL
+  FAIL,
+  GET_MY_FOLLOWINGS
 } from "./types";
 
 import setAuthToken from "../../components/utils/setAuthToken";
@@ -88,15 +89,8 @@ export const updateMe = data => {
 
 export const logout = () => {
   return async dispatch => {
-    try {
-      setAuthToken();
-      dispatch({ type: LOGOUT_USER });
-    } catch (err) {
-      dispatch({
-        type: AUTH_FAIL,
-        payload: err.response.data.msg
-      });
-    }
+    setAuthToken();
+    dispatch({ type: LOGOUT_USER });
   };
 };
 
@@ -164,6 +158,24 @@ export const resetPassword = data => {
       console.log(err.response.data.msg);
       dispatch({
         type: RESET_PASSWORD_FAIL,
+        payload: err.response.data.msg
+      });
+    }
+  };
+};
+
+export const getMyFollowings = id => {
+  return async dispatch => {
+    try {
+      const res = await axios.get(`/api/users/following/${id}`);
+      dispatch({
+        type: GET_MY_FOLLOWINGS,
+        payload: res.data.data.followings
+      });
+    } catch (err) {
+      console.log(err.response.data.msg);
+      dispatch({
+        type: FAIL,
         payload: err.response.data.msg
       });
     }

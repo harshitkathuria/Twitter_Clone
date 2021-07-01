@@ -8,11 +8,16 @@ import {
   USER_LOADED,
   FAIL,
   LOGOUT_USER,
-  UPDATE_USER
+  UPDATE_USER,
+  GET_MY_FOLLOWINGS,
+  FOLLOW_USER,
+  UNFOLLOW_USER
 } from "../actions/types";
 
 const initialState = {
   user: null,
+  myFollowers: null,
+  myFollowings: null,
   isAuthenticated: null,
   loading: true,
   error: null
@@ -58,6 +63,25 @@ const authReducer = (state = initialState, action) => {
         error: action.payload
       };
 
+    case GET_MY_FOLLOWINGS:
+      return {
+        ...state,
+        myFollowings: action.payload
+      };
+    case FOLLOW_USER:
+      return {
+        ...state,
+        myFollowings: state.myFollowings
+          ? [action.payload.user, ...state.myFollowings]
+          : [action.payload.user]
+      };
+    case UNFOLLOW_USER:
+      return {
+        ...state,
+        myFollowings: state.myFollowings.filter(
+          user => user._id !== action.payload.user._id
+        )
+      };
     case FAIL:
       return {
         ...state,

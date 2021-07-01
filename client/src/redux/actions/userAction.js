@@ -1,10 +1,12 @@
 import axios from "axios";
 import {
   FAIL,
+  FOLLOW_USER,
   GET_FOLLOWERS_SUCCESS,
   GET_FOLLOWINGS_SUCCESS,
   GET_TWEETS_AND_RETWEETS,
-  GET_USER
+  GET_USER,
+  UNFOLLOW_USER
 } from "./types";
 
 export const getUser = id => {
@@ -24,13 +26,47 @@ export const getUser = id => {
   };
 };
 
+export const followUser = (user, loggedInUser) => {
+  return async dispatch => {
+    try {
+      await axios.post(`/api/connect/follow/${user._id}`);
+      dispatch({
+        type: FOLLOW_USER,
+        payload: { user, loggedInUser }
+      });
+    } catch (err) {
+      dispatch({
+        type: FAIL,
+        payload: err.response.data.msg
+      });
+    }
+  };
+};
+
+export const unfollowUser = (user, loggedInUser) => {
+  return async dispatch => {
+    try {
+      await axios.delete(`/api/connect/unfollow/${user._id}`);
+      dispatch({
+        type: UNFOLLOW_USER,
+        payload: { user, loggedInUser }
+      });
+    } catch (err) {
+      dispatch({
+        type: FAIL,
+        payload: err.response.data.msg
+      });
+    }
+  };
+};
+
 export const getFollowers = id => {
   return async dispatch => {
     try {
       const res = await axios.get(`/api/users/followers/${id}`);
       dispatch({
         type: GET_FOLLOWERS_SUCCESS,
-        payload: res.data.data
+        payload: res.data.data.followers
       });
     } catch (err) {
       dispatch({
@@ -47,7 +83,7 @@ export const getFollowings = id => {
       const res = await axios.get(`/api/users/following/${id}`);
       dispatch({
         type: GET_FOLLOWINGS_SUCCESS,
-        payload: res.data.data
+        payload: res.data.data.followings
       });
     } catch (err) {
       dispatch({

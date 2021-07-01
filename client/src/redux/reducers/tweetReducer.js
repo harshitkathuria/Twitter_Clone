@@ -14,8 +14,6 @@ import {
 
 const initialState = {
   homeFeed: null,
-  followers: null,
-  followings: null,
   tweetsAndRetweets: null,
   likes: [],
   retweets: null
@@ -33,10 +31,10 @@ const tweetReducer = (state = initialState, action) => {
         ...state,
         homeFeed: state.homeFeed
           ? [action.payload, ...state.homeFeed]
-          : action.payload,
+          : [action.payload],
         tweetsAndRetweets: state.tweetsAndRetweets
           ? [action.payload, ...state.tweetsAndRetweets]
-          : action.payload
+          : [action.payload]
       };
     case CREATE_RETWEET:
       return {
