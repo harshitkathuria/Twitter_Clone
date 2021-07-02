@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { setAlert } from "../../redux/actions/alertAction";
+import profilePicture from "../../assets/defaultProfile.jpg";
 
 import Modal from "react-modal";
 
@@ -103,7 +104,7 @@ const Tweet = ({ tweet }) => {
   Modal.setAppElement(document.getElementById("root"));
 
   return (
-    <div className="border-b-2 border-gray-200 dark:border-gray-500 flex px-2 pt-3">
+    <div className="border-b-2 border-gray-200 dark:border-gray-secondary flex px-2 pt-3">
       <div className="flex flex-col flex-grow-0 flex-shrink-0 items-center mr-3">
         <div id="img-wrapper" className="flex flex-grow-0 w-full">
           <Link
@@ -111,7 +112,10 @@ const Tweet = ({ tweet }) => {
             className="flex items-center justify-center w-full"
           >
             <img
-              src="../../assets/defaultProfile.jpg"
+              src={
+                require(`../../assets/users/${user.profilePicture}`).default ||
+                profilePicture
+              }
               alt="User Profile"
               className="w-12 h-12 rounded-full"
             />
@@ -180,7 +184,7 @@ const Tweet = ({ tweet }) => {
                   style={modalStyle}
                 >
                   <div
-                    className={`flex border-b-2 border-gray-200 dark:border-gray-500 -m-1`}
+                    className={`flex border-b-2 border-gray-200 dark:border-gray-secondary -m-1`}
                   >
                     <div className="flex-1 m-2">
                       <h2 className="px-4 py-2 text-xl font-bold text-black">
@@ -212,7 +216,7 @@ const Tweet = ({ tweet }) => {
                       />
                     </div>
                   </div>
-                  <div className="flex justify-end border-b-2 border-gray-200 dark:border-gray-500">
+                  <div className="flex justify-end border-b-2 border-gray-200 dark:border-gray-secondary">
                     <div className="flex w-64 px-2 justify-end">
                       <div>
                         <div className="flex text-center px-1 py-1 m-2">

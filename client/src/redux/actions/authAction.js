@@ -69,10 +69,14 @@ export const updateMe = data => {
     try {
       const config = {
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "multipart/form-data"
         }
       };
-      const res = await axios.patch("/api/users/updateMe", data, config);
+      const formData = new FormData();
+      for (const el in data) {
+        formData.append(el, data[el]);
+      }
+      const res = await axios.patch("/api/users/updateMe", formData, config);
       dispatch({
         type: UPDATE_USER,
         payload: res.data.data.user

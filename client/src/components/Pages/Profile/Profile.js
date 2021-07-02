@@ -4,6 +4,8 @@ import { useSelector, useDispatch } from "react-redux";
 import Modal from "react-modal";
 import Logo from "../../layout/Logo";
 
+import defaultPicture from "../../../assets/defaultProfile.jpg";
+
 import {
   followUser,
   getFollowers,
@@ -15,7 +17,7 @@ import { getMyFollowings, updateMe } from "../../../redux/actions/authAction";
 import TweetsList from "./TweetsList";
 import Spinner from "../../layout/Spinner";
 
-const Profile = ({ id }) => {
+const Profile = ({ id, history }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -34,6 +36,12 @@ const Profile = ({ id }) => {
   const followings = useSelector(state => state.user.followings);
   const loggedInUserFollowings = useSelector(state => state.auth.myFollowings);
   const userLoading = useSelector(state => state.user.loading);
+  const coverPicture = loggedInUser?.coverPicture
+    ? require(`../../../assets/users/${loggedInUser.coverPicture}`).default
+    : null;
+  const profilePicture = loggedInUser?.profilePicture
+    ? require(`../../../assets/users/${loggedInUser.profilePicture}`).default
+    : null;
 
   useEffect(() => {
     dispatch(getMyFollowings(loggedInUser._id));
@@ -70,9 +78,15 @@ const Profile = ({ id }) => {
     }
   };
 
-  const onUpdateUser = () => {
-    dispatch(updateMe(userProfile));
+  const onUpdateUser = e => {
+    e.preventDefault();
+    const updateUser = { ...userProfile };
+    updateUser.profilePicture =
+      document.getElementById("profilePicture").files[0];
+    updateUser.coverPicture = document.getElementById("coverPicture").files[0];
+    dispatch(updateMe(updateUser));
     setModalIsOpen(false);
+    window.location.reload();
   };
 
   const onFollowUser = () => {
@@ -93,14 +107,14 @@ const Profile = ({ id }) => {
     loggedInUserFollowings &&
     !userLoading ? (
     <section
-      className="border-r-2 border-gray-200 dark:border-gray-500"
+      className="w-2/5 border-r-2 border-gray-200 dark:border-gray-500"
       style={{ marginLeft: "calc(20% + 8rem - 4px)" }}
     >
       <div>
         <div className="flex justify-start">
           <div className="px-4 py-2 mx-2">
             <Link
-              to=""
+              to="/"
               className=" text-2xl font-medium rounded-full text-blue float-right"
             >
               <svg
@@ -128,16 +142,9 @@ const Profile = ({ id }) => {
           className="w-full bg-cover bg-no-repeat bg-center"
           style={{
             height: "200px",
-            backgroundImage:
-              "url(https://pbs.twimg.com/profile_banners/2161323234/1585151401/600x200)"
+            backgroundImage: `url(${coverPicture || defaultPicture})`
           }}
-        >
-          <img
-            className="opacity-0 w-full h-full"
-            src="https://pbs.twimg.com/profile_banners/2161323234/1585151401/600x200"
-            alt=""
-          />
-        </div>
+        ></div>
         <div className="p-4">
           <div className="relative flex w-full">
             <div className="flex flex-1">
@@ -147,11 +154,14 @@ const Profile = ({ id }) => {
                   className="md rounded-full relative avatar"
                 >
                   <img
-                    style={{ height: "9rem", width: "9rem" }}
-                    className="md rounded-full relative border-4 border-gray-900"
-                    src="https://pbs.twimg.com/profile_images/1254779846615420930/7I4kP65u_400x400.jpg"
+                    style={{
+                      height: "9rem",
+                      width: "9rem"
+                    }}
+                    src={profilePicture || defaultPicture}
+                    className="md rounded-full relative"
                     alt=""
-                  />
+                  ></img>
                   <div className="absolute"></div>
                 </div>
               </div>
@@ -169,7 +179,7 @@ const Profile = ({ id }) => {
                     onRequestClose={() => setModalIsOpen(false)}
                     style={modalStyle}
                   >
-                    <div className="md:flex flex-col justify-between items-center w-full">
+                    <div className="overflow-x-hidden md:flex flex-col justify-between items-center w-full">
                       <div className="logo-wrapper flex justify-center">
                         <Logo classes={"w-8 h-8 text-blue dark:text-white"} />
                       </div>
@@ -180,6 +190,37 @@ const Profile = ({ id }) => {
                         <div className="form-wrapper">
                           <form className="mt-6" onSubmit={onUpdateUser}>
                             <div className="flex flex-col align-start gap-3 mb-4">
+                              <div className="flex">
+                                <div className="">
+                                  <label
+                                    htmlFor="profilePicture"
+                                    className="block text-xs font-semibold text-gray-600 uppercase"
+                                  >
+                                    Profile Picture
+                                  </label>
+                                  <input
+                                    type="file"
+                                    accept="image/*"
+                                    id="profilePicture"
+                                    name="profilePicture"
+                                  />
+                                </div>
+                                <div className="">
+                                  <label
+                                    htmlFor="coverPicture"
+                                    className="block text-xs font-semibold text-gray-600 uppercase"
+                                  >
+                                    Cover Picture
+                                  </label>
+                                  <input
+                                    type="file"
+                                    accept="image/*"
+                                    id="coverPicture"
+                                    name="coverPicture"
+                                  />
+                                </div>
+                              </div>
+
                               <div>
                                 <label
                                   htmlFor="firstname"
@@ -192,7 +233,7 @@ const Profile = ({ id }) => {
                                   type="text"
                                   name="name"
                                   placeholder="Name"
-                                  className="border-2 block w-full p-3 mt-2 bg-gray-200 dark:bg-black-dark appearance-none focus:outline-none focus:shadow-inner focus:border-blue dark:text-gray-primary rounded"
+                                  className="border-2 block w-full p-3 mt-2 bg-gray-200 dark:bg-black-dark appearance-none focus:outline-none focus:shadow-inner focus:border-blue dark:text-gray-primary dark:border-gray-secondary rounded"
                                   onChange={onChange}
                                   value={userProfile.name}
                                   required
@@ -200,7 +241,7 @@ const Profile = ({ id }) => {
                               </div>
                               <div>
                                 <label
-                                  htmlFor="nio"
+                                  htmlFor="bio"
                                   className="block text-xs font-semibold text-gray-600 uppercase"
                                 >
                                   Bio
@@ -210,7 +251,7 @@ const Profile = ({ id }) => {
                                   type="text"
                                   name="bio"
                                   placeholder="Bio"
-                                  className="border-2 block w-full p-3 mt-2 text-gray-700 bg-gray-200 dark:bg-black-dark appearance-none focus:outline-none focus:shadow-inner focus:border-blue dark:text-gray-primary rounded"
+                                  className="border-2 block w-full p-3 mt-2 text-gray-700 bg-gray-200 dark:bg-black-dark appearance-none focus:outline-none focus:shadow-inner focus:border-blue dark:text-gray-primary dark:border-gray-secondary rounded"
                                   onChange={onChange}
                                   value={userProfile.bio}
                                 />
@@ -227,7 +268,7 @@ const Profile = ({ id }) => {
                                   type="text"
                                   name="location"
                                   placeholder="Location"
-                                  className="border-2 block w-full p-3 mt-2 text-gray-700 bg-gray-200 dark:bg-black-dark appearance-none focus:outline-none focus:shadow-inner focus:border-blue dark:text-gray-primary rounded"
+                                  className="border-2 block w-full p-3 mt-2 text-gray-700 bg-gray-200 dark:bg-black-dark appearance-none focus:outline-none focus:shadow-inner focus:border-blue dark:text-gray-primary dark:border-gray-secondary rounded"
                                   onChange={onChange}
                                   value={userProfile.location}
                                 />
@@ -244,7 +285,7 @@ const Profile = ({ id }) => {
                                   type="text"
                                   name="website"
                                   placeholder="Website"
-                                  className="border-2 block w-full p-3 mt-2 text-gray-700 bg-gray-200 dark:bg-black-dark appearance-none focus:outline-none focus:shadow-inner focus:border-blue rounded dark:text-gray-primary dark:placeholder-gray-primary"
+                                  className="border-2 block w-full p-3 mt-2 text-gray-700 bg-gray-200 dark:bg-black-dark appearance-none focus:outline-none focus:shadow-inner focus:border-blue rounded dark:text-gray-primary dark:border-gray-secondary dark:placeholder-gray-500"
                                   onChange={onChange}
                                   value={userProfile.website}
                                 />

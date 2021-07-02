@@ -11,6 +11,17 @@ const TweetModalContent = ({ header, classes, closeModal, tweetId }) => {
     setText(e.target.value);
   };
 
+  const onUploadFile = () => {
+    let input = document.createElement("input");
+    input.type = "file";
+    input.onchange = () => {
+      // you can use this method to get file and perform respective operations
+      let files = Array.from(input.files);
+      console.log(files);
+    };
+    input.click();
+  };
+
   const postTweet = () => {
     if (tweetId) dispatch(createComment(tweetId, text));
     else dispatch(createTweet({ text }));
@@ -20,7 +31,7 @@ const TweetModalContent = ({ header, classes, closeModal, tweetId }) => {
   return (
     <>
       <div
-        className={`flex border-b-2 border-gray-200 dark:border-gray-500 ${classes}`}
+        className={`flex border-b-2 border-gray-200 dark:border-gray-secondary ${classes}`}
       >
         <div className="flex-1 m-2">
           <h2 className="px-4 py-2 text-xl font-bold text-black dark:text-gray-primary">
@@ -49,11 +60,14 @@ const TweetModalContent = ({ header, classes, closeModal, tweetId }) => {
           />
         </div>
       </div>
-      <div className="flex justify-end border-b-2 border-gray-200 dark:border-gray-500">
+      <div className="flex justify-end border-b-2 border-gray-200 dark:border-gray-secondary">
         <div className="flex w-64 px-2 justify-end">
           <div>
             <div className="flex text-center px-1 py-1 m-2">
-              <div className="mt-1 group flex items-center text-blue-400 px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-opacity-10 hover:bg-blue">
+              <div
+                className="cursor-pointer mt-1 group flex items-center text-blue-400 px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-opacity-10 hover:bg-blue"
+                onClick={onUploadFile}
+              >
                 <svg
                   className="text-center h-7 w-6"
                   fill="none"

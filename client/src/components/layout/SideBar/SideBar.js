@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import profilePicture from "../../../assets/defaultProfile.jpg";
 
 import { loadUser, logout } from "../../../redux/actions/authAction";
 
@@ -19,7 +20,7 @@ const SideBar = () => {
   };
 
   return (
-    <aside className="max-w-xs w-1/5 ml-32 py-1 h-screen max-h-screen border-r-2 border-gray-200 dark:border-gray-500 fixed top-0 left-0 z-10 overflow-y-auto overflow-x-hidden">
+    <aside className="max-w-xs w-1/5 ml-32 py-1 h-screen max-h-screen border-r-2 border-gray-200 dark:border-gray-secondary fixed top-0 left-0 z-10 overflow-y-auto overflow-x-hidden">
       <div className="flex flex-col justify-between h-full">
         <div className="flex flex-col items-start p-1">
           <div className="logo mb-2">
@@ -41,7 +42,10 @@ const SideBar = () => {
               <div>
                 <img
                   className="inline-block h-10 w-10 rounded-full"
-                  src="../../assets/defaultProfile.jpg"
+                  src={
+                    require(`../../../assets/users/${user.profilePicture}`)
+                      .default || profilePicture
+                  }
                   alt=""
                 />
               </div>

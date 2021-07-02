@@ -6,10 +6,18 @@ import {
   GET_FOLLOWINGS_SUCCESS,
   GET_TWEETS_AND_RETWEETS,
   GET_USER,
+  SET_LOADING,
   UNFOLLOW_USER
 } from "./types";
 
+export const setLoading = () => {
+  return {
+    type: SET_LOADING
+  };
+};
+
 export const getUser = id => {
+  setLoading();
   return async dispatch => {
     try {
       const res = await axios.get(`/api/users/${id}`);
@@ -27,6 +35,7 @@ export const getUser = id => {
 };
 
 export const followUser = (user, loggedInUser) => {
+  setLoading();
   return async dispatch => {
     try {
       await axios.post(`/api/connect/follow/${user._id}`);
@@ -44,6 +53,7 @@ export const followUser = (user, loggedInUser) => {
 };
 
 export const unfollowUser = (user, loggedInUser) => {
+  setLoading();
   return async dispatch => {
     try {
       await axios.delete(`/api/connect/unfollow/${user._id}`);
@@ -61,6 +71,7 @@ export const unfollowUser = (user, loggedInUser) => {
 };
 
 export const getFollowers = id => {
+  setLoading();
   return async dispatch => {
     try {
       const res = await axios.get(`/api/users/followers/${id}`);
@@ -78,6 +89,7 @@ export const getFollowers = id => {
 };
 
 export const getFollowings = id => {
+  setLoading();
   return async dispatch => {
     try {
       const res = await axios.get(`/api/users/following/${id}`);
@@ -95,6 +107,7 @@ export const getFollowings = id => {
 };
 
 export const getUserTweetsAndRetweets = id => {
+  setLoading();
   return async dispatch => {
     try {
       const tweets = (await axios.get(`/api/users/tweets/${id}`)).data.data
