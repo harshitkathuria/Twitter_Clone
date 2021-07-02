@@ -74,10 +74,10 @@ exports.getFollowers = async (req, res) => {
     const followers = (
       await Connection.find({ followed: req.params.id }).populate("following")
     ).map(data => data.following);
+
     res.status(200).json({
       status: "success",
       data: {
-        length: followers.length,
         followers
       }
     });
@@ -92,18 +92,15 @@ exports.getFollowers = async (req, res) => {
 // Get Followings of an User
 exports.getFollowing = async (req, res) => {
   try {
-    let followings = await Connection.find({
-      following: req.params.id
-    }).populate("followed");
+    const followings = (
+      await Connection.find({
+        following: req.params.id
+      }).populate("followed")
+    ).map(data => data.followed);
 
-    if (!req.params.isConv) {
-      console.log("not conversations");
-      followings = followings.map(data => data.followed);
-    }
     res.status(200).json({
       status: "success",
       data: {
-        length: followings.length,
         followings
       }
     });

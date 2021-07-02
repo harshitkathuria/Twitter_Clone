@@ -19,6 +19,18 @@ const commentSchema = new mongoose.Schema(
     },
     media: {
       type: String
+    },
+    likesCount: {
+      type: Number,
+      default: 0
+    },
+    commentsCount: {
+      type: Number,
+      default: 0
+    },
+    retweetsCount: {
+      type: Number,
+      default: 0
     }
   },
   { timestamps: true }

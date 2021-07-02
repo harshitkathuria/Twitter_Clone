@@ -2,6 +2,7 @@ const Connection = require("../models/Connection");
 const Tweet = require("../models/Tweet");
 const Retweet = require("../models/Retweet");
 const User = require("../models/User");
+const Comment = require("../models/Comment");
 
 exports.getHomeContent = async (req, res) => {
   try {
@@ -24,7 +25,12 @@ exports.getHomeContent = async (req, res) => {
           }
         })
         .populate("userId", "name username");
-      result = result.concat(tweetArr, retweetArr);
+      const commentsArr = await Comment.find({
+        userId: followings[i].followed
+      })
+        .populate("tweetId")
+        .populate("userId", "name username");
+      result = result.concat(tweetArr, retweetArr, commentsArr);
     }
     // Get logged in user's tweets and retweets
     result = result.concat(
@@ -35,6 +41,17 @@ exports.getHomeContent = async (req, res) => {
     );
     result = result.concat(
       await Retweet.find({ userId: req.user.id })
+        .populate({
+          path: "tweetId",
+          populate: {
+            path: "userId",
+            select: "name username"
+          }
+        })
+        .populate("userId", "name username")
+    );
+    result = result.concat(
+      await Comment.find({ userId: req.user.id })
         .populate({
           path: "tweetId",
           populate: {

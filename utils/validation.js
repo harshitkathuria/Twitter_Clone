@@ -6,7 +6,7 @@ exports.signUpUserValidation = data => {
     username: Joi.string().required(),
     email: Joi.string().email().required(),
     DOB: Joi.date().required(),
-    password: Joi.string().required(),
+    password: Joi.string().required().min(8),
     confirmPassword: Joi.ref("password")
   }).options({ abortEarly: false });
   return schema.validate(data);

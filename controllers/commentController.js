@@ -7,7 +7,7 @@ exports.createComment = async (req, res) => {
     const tweetId = req.params.id,
       userId = req.user.id,
       text = req.body.text;
-    const comment = await Comment.create({ tweetId, userId, text });
+    let comment = await Comment.create({ tweetId, userId, text });
     const tweet = await Tweet.findByIdAndUpdate(
       tweetId,
       {
@@ -15,6 +15,17 @@ exports.createComment = async (req, res) => {
       },
       { new: true }
     );
+
+    comment = await comment
+      .populate({
+        path: "tweetId",
+        populate: {
+          path: "userId",
+          select: "name username"
+        }
+      })
+      .populate("userId", "name username")
+      .execPopulate();
 
     res.status(200).json({
       status: "success",
@@ -24,6 +35,7 @@ exports.createComment = async (req, res) => {
       }
     });
   } catch (err) {
+    console.log(err);
     res.status(400).json({
       status: "fail",
       msg: err.message
