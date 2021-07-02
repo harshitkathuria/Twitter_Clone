@@ -1,4 +1,66 @@
 const User = require("../models/User");
+const multer = require("multer");
+const sharp = require("sharp");
+
+//image stored in buffer
+const multerStorage = multer.memoryStorage();
+
+// Multer filter
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith("image")) {
+    cb(null, true);
+  } else {
+    console.log("no");
+    cb(null, false);
+  }
+};
+
+const upload = multer({
+  storage: multerStorage,
+  fileFilter: multerFilter
+});
+
+exports.uploadUserImages = upload.fields([
+  { name: "profilePicture", max: 1 },
+  { name: "coverPicture", max: 1 }
+]);
+
+//Resize user photo
+exports.resizeUserImages = async (req, res, next) => {
+  try {
+    // console.log(req.files.profilePicture, req.files.coverPicture);
+    if (!req.files.profilePicture && !req.files.coverPicture) return next();
+
+    //1) profilePicture
+    if (req.files.profilePicture) {
+      req.body.profilePicture = `user-profile-${
+        req.user.id
+      }-${Date.now()}.jpeg`;
+      await sharp(req.files.profilePicture[0].buffer)
+        .resize(500, 500)
+        .toFormat("jpeg")
+        //90 % quality
+        .jpeg({ quality: 90 })
+        .toFile(`./client/src/assets/users/${req.body.profilePicture}`);
+    }
+
+    //1) coverPicture
+    if (req.files.coverPicture) {
+      req.body.coverPicture = `user-cover-${req.user.id}-${Date.now()}.jpeg`;
+      await sharp(req.files.coverPicture[0].buffer)
+        .resize(1000, 1000)
+        .toFormat("jpeg")
+        //90 % quality
+        .jpeg({ quality: 90 })
+        .toFile(`./client/src/assets/users/${req.body.coverPicture}`);
+    }
+
+    next();
+  } catch (err) {
+    console.log(err.message);
+    res.status(400).json({ status: "error", msg: err.message });
+  }
+};
 
 // Return object of the allowed fields
 const filterObj = (obj, ...allowedFields) => {
@@ -39,7 +101,9 @@ exports.updateMe = async (req, res) => {
     "email",
     "bio",
     "location",
-    "website"
+    "website",
+    "profilePicture",
+    "coverPicture"
   );
 
   const updatedUser = await User.findByIdAndUpdate(req.user.id, filteredBody, {
