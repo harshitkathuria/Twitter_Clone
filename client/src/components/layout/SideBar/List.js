@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 
@@ -9,10 +9,22 @@ const List = () => {
     const htmlClasses = document.querySelector("html").classList;
     if (e.target.checked) {
       htmlClasses.add("dark");
+      localStorage.setItem("theme", "dark");
     } else {
       htmlClasses.remove("dark");
+      localStorage.setItem("theme", "light");
     }
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("theme") === "dark") {
+      document.getElementById("toggle").checked = true;
+      document.querySelector("html").classList.add("dark");
+    } else {
+      document.getElementById("toggle").checked = false;
+      document.querySelector("html").classList.remove("dark");
+    }
+  }, []);
 
   return (
     <ul className="my-1.5">
@@ -138,16 +150,16 @@ const List = () => {
             <label>
               <input
                 id="toggle"
-                class="toggle-checkbox"
+                className="toggle-checkbox"
                 type="checkbox"
                 onChange={onThemeChange}
               />
-              <div class="toggle-slot">
-                <div class="sun-icon-wrapper">
+              <div className="toggle-slot">
+                <div className="sun-icon-wrapper">
                   <i className="far fa-sun"></i>
                 </div>
-                <div class="toggle-button"></div>
-                <div class="moon-icon-wrapper">
+                <div className="toggle-button"></div>
+                <div className="moon-icon-wrapper">
                   <i className="far fa-moon"></i>
                 </div>
               </div>
