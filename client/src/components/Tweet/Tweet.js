@@ -113,8 +113,9 @@ const Tweet = ({ tweet }) => {
           >
             <img
               src={
-                require(`../../assets/users/${user.profilePicture}`).default ||
-                profilePicture
+                user.profilePicture
+                  ? require(`../../assets/users/${user.profilePicture}`).default
+                  : profilePicture
               }
               alt="User Profile"
               className="w-12 h-12 rounded-full"

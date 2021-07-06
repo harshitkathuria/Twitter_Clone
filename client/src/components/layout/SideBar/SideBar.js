@@ -43,8 +43,10 @@ const SideBar = () => {
                 <img
                   className="inline-block h-10 w-10 rounded-full"
                   src={
-                    require(`../../../assets/users/${user.profilePicture}`)
-                      .default || profilePicture
+                    user.profilePicture
+                      ? require(`../../../assets/users/${user.profilePicture}`)
+                          .default
+                      : profilePicture
                   }
                   alt=""
                 />
