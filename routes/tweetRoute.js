@@ -14,7 +14,11 @@ router.use(authController.protect);
 router
   .route("/")
   .get(tweetController.getAllTweets)
-  .post(tweetController.createTweet);
+  .post(
+    tweetController.uploadTweetImage,
+    tweetController.resizeTweetImage,
+    tweetController.createTweet
+  );
 
 // Related to Like
 router.get("/like/users/:id", likeController.getLikedUsersOfTweet);
