@@ -35,15 +35,21 @@ export const createTweet = data => {
     try {
       const config = {
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "multipart/form-data"
         }
       };
-      const res = await axios.post("/api/tweets", data, config);
+      console.log(data);
+      const formData = new FormData();
+      for (const el in data) {
+        formData.append(el, data[el]);
+      }
+      const res = await axios.post("/api/tweets", formData, config);
       dispatch({
         type: CREATE_TWEET,
         payload: res.data.data.tweet
       });
     } catch (err) {
+      console.log(err);
       dispatch({
         type: FAIL,
         payload: err.response.data.msg

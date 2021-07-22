@@ -5,6 +5,7 @@ import { createComment, createTweet } from "../../redux/actions/tweetAction";
 
 const TweetModalContent = ({ header, classes, closeModal, tweetId }) => {
   const [text, setText] = useState("");
+  const [image, setImage] = useState(null);
   const dispatch = useDispatch();
 
   const onChange = e => {
@@ -14,18 +15,18 @@ const TweetModalContent = ({ header, classes, closeModal, tweetId }) => {
   const onUploadFile = () => {
     let input = document.createElement("input");
     input.type = "file";
-    input.onchange = () => {
-      // you can use this method to get file and perform respective operations
-      let files = Array.from(input.files);
-      console.log(files);
-    };
+    input.accept = "image/*";
     input.click();
+    input.onchange = () => {
+      setImage(input.files[0]);
+    };
   };
 
   const postTweet = () => {
     if (tweetId) dispatch(createComment(tweetId, text));
-    else dispatch(createTweet({ text }));
+    else dispatch(createTweet({ text, media: image }));
     setText("");
+    setImage(null);
     dispatch(setAlert("Your tweet was sent", "info"));
   };
   return (

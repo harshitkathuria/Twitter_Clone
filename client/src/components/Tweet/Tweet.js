@@ -20,6 +20,7 @@ const Tweet = ({ tweet }) => {
     _id: tweetId,
     userId: { _id, name, username },
     text,
+    media,
     createdAt,
     likesCount,
     retweetsCount,
@@ -57,7 +58,8 @@ const Tweet = ({ tweet }) => {
       width: "40%",
       marginLeft: "auto",
       marginRight: "auto",
-      borderRadius: "15px"
+      borderRadius: "15px",
+      overflow: "hidden"
     }
   };
 
@@ -157,12 +159,19 @@ const Tweet = ({ tweet }) => {
               className="text-red-600 cursor-pointer font-semibold"
             >
               Delete
-              {/* Delete <i className="fas fa-minus-circle"></i> */}
-              {/* <i className="fas fa-times-circle"></i> */}
             </div>
           )}
         </div>
         <div id="tweet-info" className="flex flex-col w-full">
+          {media && (
+            <div id="tweet-media">
+              <img
+                src={require(`../../assets/tweets/${media}`).default}
+                alt="Media"
+                className="max-h-40 mb-4 max-w-full"
+              />
+            </div>
+          )}
           <div id="tweet-text" className="w-full">
             <p>{text}</p>
           </div>
@@ -184,13 +193,11 @@ const Tweet = ({ tweet }) => {
                   onRequestClose={() => setModalIsOpen(false)}
                   style={modalStyle}
                 >
-                  <div
-                    className={`flex border-b-2 border-gray-200 dark:border-gray-secondary -m-1`}
-                  >
-                    <div className="flex-1 m-2">
+                  <div className="-m-1">
+                    <div className="mb-2">
                       <h2 className="px-4 py-2 text-xl font-bold text-black">
                         <i
-                          className="fas fa-times test blue"
+                          className="fas fa-times blue"
                           onClick={() => setModalIsOpen(false)}
                         ></i>
                       </h2>
@@ -206,8 +213,9 @@ const Tweet = ({ tweet }) => {
                     </div>
                     <div className="flex-1 px-2 pt-2 mt-2">
                       <textarea
+                        style={{ resize: "none" }}
                         id="tweet-text"
-                        className=" bg-transparent text-black font-normal text-xl w-full focus:outline-none"
+                        className="bg-transparent text-black font-normal text-xl w-full focus:outline-none"
                         rows="3"
                         cols="50"
                         placeholder="What's happening?"
@@ -217,7 +225,7 @@ const Tweet = ({ tweet }) => {
                       />
                     </div>
                   </div>
-                  <div className="flex justify-end border-b-2 border-gray-200 dark:border-gray-secondary">
+                  <div className="flex justify-end">
                     <div className="flex w-64 px-2 justify-end">
                       <div>
                         <div className="flex text-center px-1 py-1 m-2">

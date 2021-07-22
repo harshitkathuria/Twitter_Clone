@@ -81,9 +81,14 @@ const Profile = ({ id, history }) => {
   const onUpdateUser = e => {
     e.preventDefault();
     const updateUser = { ...userProfile };
-    updateUser.profilePicture =
-      document.getElementById("profilePicture").files[0];
-    updateUser.coverPicture = document.getElementById("coverPicture").files[0];
+    if (document.getElementById("profilePicture").files[0]) {
+      updateUser.profilePicture =
+        document.getElementById("profilePicture").files[0];
+    }
+    if (document.getElementById("coverPicture").files[0]) {
+      updateUser.coverPicture =
+        document.getElementById("coverPicture").files[0];
+    }
     dispatch(updateMe(updateUser));
     setModalIsOpen(false);
     window.location.reload();
@@ -144,7 +149,14 @@ const Profile = ({ id, history }) => {
             height: "200px",
             backgroundImage: `url(${coverPicture || defaultPicture})`
           }}
-        ></div>
+        >
+          {/* <img
+            src={coverPicture || defaultPicture}
+            alt=""
+            className="w-full h-full"
+          /> */}
+          {console.log(defaultPicture)}
+        </div>
         <div className="p-4">
           <div className="relative flex w-full">
             <div className="flex flex-1">
@@ -188,7 +200,7 @@ const Profile = ({ id, history }) => {
                           Update Your Profile
                         </p>
                         <div className="form-wrapper">
-                          <form className="mt-6" onSubmit={onUpdateUser}>
+                          <div className="mt-6">
                             <div className="flex flex-col align-start gap-3 mb-4">
                               <div className="flex">
                                 <div className="">
@@ -293,6 +305,7 @@ const Profile = ({ id, history }) => {
 
                               <div className="text-center mt-6">
                                 <input
+                                  onClick={onUpdateUser}
                                   type="submit"
                                   name="login"
                                   id="login"
@@ -301,7 +314,7 @@ const Profile = ({ id, history }) => {
                                 />
                               </div>
                             </div>
-                          </form>
+                          </div>
                         </div>
                       </div>
                     </div>
