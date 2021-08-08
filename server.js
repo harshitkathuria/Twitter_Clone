@@ -64,6 +64,15 @@ io.on("connection", socket => {
   });
 });
 
+if (process.env.NODE_ENV == "production") {
+  const path = require("path");
+
+  app.get("/", (req, res) => {
+    app.use(express.static(path.resolve(__dirname, "client", "build")));
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
+
 const port = process.env.PORT || 3000;
 server.listen(port, () => {
   console.log(`Listening from port ${port}`);
