@@ -5,9 +5,11 @@
   "main": "server.js",
   "scripts": {
     "server": "node run server",
-    "server:dev": "nodemon run server.js",
+    "server:dev": "nodemon server.js",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server:dev\" \"npm run client\""
+    "client-install": "npm install --prefix client",
+    "dev": "concurrently \"npm run server:dev\" \"npm run client\"",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client"
   },
   "author": "Harshit Kathuria",
   "license": "ISC",
