@@ -7,7 +7,9 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "autoprefixer": "^9.8.6",
     "axios": "^0.21.1",
+    "postcss": "^7.0.36",
     "react": "^17.0.2",
     "react-alert": "^7.0.3",
     "react-alert-template-basic": "^1.0.2",
@@ -19,6 +21,7 @@
     "redux": "^4.1.0",
     "redux-thunk": "^2.3.0",
     "socket.io-client": "^4.1.2",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.7",
     "timeago.js": "^4.0.2",
     "web-vitals": "^1.0.1"
   },
@@ -46,10 +49,6 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "autoprefixer": "^9.8.6",
-    "postcss": "^7.0.36",
-    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.0"
-  },
+  "devDependencies": {},
   "proxy": "http://localhost:3000"
 }
