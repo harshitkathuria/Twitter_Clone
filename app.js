@@ -1,5 +1,4 @@
 const express = require("express");
-const morgan = require("morgan");
 const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
 const tweetRoute = require("./routes/tweetRoute");
@@ -10,6 +9,7 @@ const conversationRoute = require("./routes/conversationRoute");
 const app = express();
 
 if (process.env.NODE_ENV == "development") {
+  const morgan = require("morgan");
   app.use(morgan("dev"));
 }
 
