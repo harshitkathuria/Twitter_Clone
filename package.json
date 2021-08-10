@@ -4,7 +4,7 @@
   "description": "Twitter Clone, MERN Stack",
   "main": "server.js",
   "scripts": {
-    "server": "node run server",
+    "start": "node server.js",
     "server:dev": "nodemon server.js",
     "client": "npm start --prefix client",
     "client-install": "npm install --prefix client",

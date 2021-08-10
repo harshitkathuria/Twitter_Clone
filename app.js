@@ -1,3 +1,4 @@
+const path = require("path");
 const express = require("express");
 const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
@@ -20,6 +21,14 @@ app.use("/api/tweets", tweetRoute);
 app.use("/api/connect", connectionRoute);
 app.use("/api/messages", messageRoute);
 app.use("/api/conversations", conversationRoute);
+
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
 
 app.all("*", (req, res, next) => {
   res.status(404).json({
