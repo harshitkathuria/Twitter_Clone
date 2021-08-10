@@ -3,7 +3,7 @@ const router = express.Router();
 
 const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
-const LikeController = require("../controllers/LikeController");
+const LikeController = require("../controllers/likeController");
 const connectionController = require("../controllers/connectionController");
 const commentController = require("../controllers/commentController");
 const tweetController = require("../controllers/tweetController");
