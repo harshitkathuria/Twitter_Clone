@@ -8,11 +8,12 @@ Live Version: [https://twitter-carbon.herokuapp.com/](https://twitter-carbon.her
 
 1. Authentication and Authorization, which also includes resetting password.
 2. Sending Mails using [nodemailer](https://nodemailer.com/about/).
-3. Create and Delete Tweet.
-4. Like, Comment and Retweet a Tweet.
-5. Follow and Unfollow User.
-6. Update Profile including uploading images using [multer](https://www.npmjs.com/package/multer).
-7. Dark Theme
+3. Live Chatting with Users, implemented using [socket.io](https://socket.io).
+4. Create and Delete Tweet.
+5. Like, Comment and Retweet a Tweet.
+6. Follow and Unfollow User.
+7. Update Profile including uploading images using [multer](https://www.npmjs.com/package/multer).
+8. Dark Theme
 
 ## Tech Stack
 
@@ -21,6 +22,7 @@ Live Version: [https://twitter-carbon.herokuapp.com/](https://twitter-carbon.her
 - Redux
 - Nodejs
 - Expressjs
+- socket.io
 - MongoDB
 - JWT
 
