@@ -163,7 +163,7 @@ const Tweet = ({ tweet }) => {
           )}
         </div>
         <div id="tweet-info" className="flex flex-col w-full">
-          {media && (
+          {media && media != "null" && (
             <div id="tweet-media">
               <img
                 src={require(`../../assets/tweets/${media}`).default}
