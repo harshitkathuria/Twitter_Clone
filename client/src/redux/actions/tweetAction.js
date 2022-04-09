@@ -38,7 +38,6 @@ export const createTweet = data => {
           "Content-Type": "multipart/form-data"
         }
       };
-      console.log(data);
       const formData = new FormData();
       for (const el in data) {
         formData.append(el, data[el]);

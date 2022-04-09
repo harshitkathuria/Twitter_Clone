@@ -166,7 +166,7 @@ const Tweet = ({ tweet }) => {
           {media && media != "null" && (
             <div id="tweet-media">
               <img
-                src={require(`../../assets/tweets/${media}`).default}
+                src={media}
                 alt="Media"
                 className="max-h-40 mb-4 max-w-full"
               />
@@ -213,7 +213,6 @@ const Tweet = ({ tweet }) => {
                     </div>
                     <div className="flex-1 px-2 pt-2 mt-2">
                       <textarea
-                        style={{ resize: "none" }}
                         id="tweet-text"
                         className="bg-transparent text-black font-normal text-xl w-full focus:outline-none"
                         rows="3"

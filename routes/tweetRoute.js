@@ -7,6 +7,7 @@ const likeController = require("../controllers/likeController");
 const commentController = require("../controllers/commentController");
 const bookmarkController = require("../controllers/bookmarkController");
 const retweetController = require("../controllers/retweetController");
+const { upload } = require("../utils/upload");
 
 // For Logged-in users
 router.use(authController.protect);
@@ -14,11 +15,7 @@ router.use(authController.protect);
 router
   .route("/")
   .get(tweetController.getAllTweets)
-  .post(
-    tweetController.uploadTweetImage,
-    tweetController.resizeTweetImage,
-    tweetController.createTweet
-  );
+  .post(upload.single("media"), tweetController.createTweet);
 
 // Related to Like
 router.get("/like/users/:id", likeController.getLikedUsersOfTweet);

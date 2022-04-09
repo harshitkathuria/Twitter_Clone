@@ -2,46 +2,7 @@ const Tweet = require("../models/Tweet");
 const Like = require("../models/Like");
 const Comment = require("../models/Comment");
 const Retweet = require("../models/Retweet");
-const sharp = require("sharp");
-const multer = require("multer");
-
-//image stored in buffer
-const multerStorage = multer.memoryStorage();
-
-// Multer filter
-const multerFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith("image")) {
-    cb(null, true);
-  } else {
-    cb(null, false);
-  }
-};
-
-const upload = multer({
-  storage: multerStorage,
-  fileFilter: multerFilter
-});
-
-exports.uploadTweetImage = upload.single("media");
-
-//Resize user photo
-exports.resizeTweetImage = async (req, res, next) => {
-  try {
-    if (req.file) {
-      req.body.media = `tweet-media-${req.user.id}-${Date.now()}.jpeg`;
-      await sharp(req.file.buffer)
-        .resize(500, 500)
-        .toFormat("jpeg")
-        //90 % quality
-        .jpeg({ quality: 90 })
-        .toFile(`./client/src/assets/tweets/${req.body.media}`);
-    }
-    next();
-  } catch (err) {
-    console.log(err.message);
-    res.status(400).json({ status: "error", msg: err.message });
-  }
-};
+const { cloudinaryLink } = require("../utils/upload");
 
 // Get All Tweets
 exports.getAllTweets = async (req, res) => {
@@ -85,10 +46,12 @@ exports.getTweet = async (req, res) => {
 exports.createTweet = async (req, res) => {
   try {
     const user = req.user;
+    // Get Cloudinary Link for Media
+    const mediaLink = await cloudinaryLink(req.file.path);
     let tweet = await Tweet.create({
       userId: user._id,
       text: req.body.text,
-      media: req.body.media
+      media: mediaLink.url
     });
     tweet = await tweet.populate("userId", "name username").execPopulate();
 
